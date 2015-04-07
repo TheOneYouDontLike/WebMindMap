@@ -19,5 +19,11 @@
   "homepage": "https://github.com/TheOneYouDontLike/WebMindMap",
   "dependencies": {
     "express": "^4.12.3"
+  },
+  "devDependencies": {
+    "assertthat": "^0.6.0",
+    "grunt": "^0.4.5",
+    "grunt-mocha-test": "^0.12.7",
+    "mocha": "^2.2.3"
   }
 }
