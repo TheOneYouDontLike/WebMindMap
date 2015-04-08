@@ -19,11 +19,21 @@ app.get('/', function(req, res) {
         body: 'consumer_key=' + consumerKey + '&redirect_uri=http://localhost/'
     };
 
+    var requestToken = '';
     request.post(options, function(error, response, body) {
-        console.log(response);
+        requestToken = JSON.parse(body).code;
+        console.log(requestToken);
+
+        var redirectUrl = 'https://getpocket.com/auth/authorize?request_token=' + requestToken + '&redirect_uri=http://localhost:1234/working';
+        res.redirect(redirectUrl);
     });
 
-    res.send('working');
+    //res.send('working');
+
+});
+
+app.get('/working', function(req, res) {
+    res.send('authorized');
 });
 
 app.listen(port, function() {
