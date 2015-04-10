@@ -1,23 +1,21 @@
 'use strict';
 
-var request = require('request'),
-    pocketApiConsumerKey = require('./consumerKey.js');
+var request = require('request');
 
-var pocketApiConstants = {
-    headers: {
-        'content-type': 'application/json',
-        'X-Accept': 'application/json'
-    },
-    urls: {
-        requestToken: 'https://getpocket.com/v3/oauth/request',
-        accessToken: 'https://getpocket.com/v3/oauth/authorize',
-        get: 'https://getpocket.com/v3/get'
-    },
-    consumerKey: pocketApiConsumerKey
-};
-
-var pocketApi = function() {
-    var module = {};
+var pocketApi = function(pocketApiConsumerKey) {
+    var module = {},
+        pocketApiConstants = {
+            headers: {
+                'content-type': 'application/json',
+                'X-Accept': 'application/json'
+            },
+            urls: {
+                requestToken: 'https://getpocket.com/v3/oauth/request',
+                accessToken: 'https://getpocket.com/v3/oauth/authorize',
+                get: 'https://getpocket.com/v3/get'
+            },
+            consumerKey: pocketApiConsumerKey
+        };
 
     module.getRequestToken = getRequestToken;
     module.getAccessToken = getAccessToken;
@@ -84,4 +82,4 @@ var pocketApi = function() {
     return module;
 };
 
-module.exports = pocketApi();
+module.exports = pocketApi;

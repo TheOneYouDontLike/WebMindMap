@@ -1,7 +1,10 @@
 'use strict';
 
 var express = require('express'),
-    pocketApi = require('./pocketApi.js');
+    PocketApi = require('./pocketApi.js'),
+    pocketApiConsumerKey = require('./consumerKey.js');
+
+var pocketApi = new PocketApi(pocketApiConsumerKey);
 
 var app = express(),
     port = 1234,
