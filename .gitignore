@@ -29,3 +29,6 @@ node_modules
 #sublime stuff
 WebMindMap.sublime-project
 WebMindMap.sublime-workspace
+
+#consumerKey
+consumerKey.js
