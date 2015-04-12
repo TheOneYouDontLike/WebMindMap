@@ -1,6 +1,6 @@
 'use strict';
 
-var request = require('request');
+var superagent = require('superagent');
 
 var pocketApi = function(pocketApiConsumerKey) {
     var module = {},
@@ -22,61 +22,61 @@ var pocketApi = function(pocketApiConsumerKey) {
     module.getAll = getAll;
 
     function getRequestToken(callback) {
-        var options = {
-            headers: pocketApiConstants.headers,
-            url: pocketApiConstants.urls.requestToken,
-            body: JSON.stringify({
-                'consumer_key': pocketApiConstants.consumerKey,
-                'redirect_uri': "http://localhost:1234"
-            })
-        };
-
-        request.post(options, function(error, response, body) {
-            if (error) { callback(error, null); }
-
-            var requestToken = JSON.parse(body).code;
-            console.log('request token: ' + requestToken);
-
-            callback(null, requestToken);
+        var requestBody = JSON.stringify({
+            'consumer_key': pocketApiConstants.consumerKey,
+            'redirect_uri': "http://localhost:1234"
         });
+
+        superagent
+            .post(pocketApiConstants.urls.requestToken)
+            .set(pocketApiConstants.headers)
+            .send(requestBody)
+            .end(function(error, response) {
+                if (error) { callback(error, null); }
+
+                var requestToken = response.body.code;
+                console.log('requestToken:' + requestToken);
+
+                callback(null, requestToken);
+            });
     }
 
     function getAccessToken(requestToken, callback) {
-        var accessTokenRequest = {
-            headers: pocketApiConstants.headers,
-            url: pocketApiConstants.urls.accessToken,
-            body: JSON.stringify({
-                "consumer_key": pocketApiConstants.consumerKey,
-                "code": requestToken
-            })
-        };
-
-        request.post(accessTokenRequest, function(error, response, body) {
-            if (error) { callback(error, null); }
-
-            var accessToken = JSON.parse(body).access_token;
-            console.log('access token: ' + accessToken);
-
-            callback(null, accessToken);
+        var requestBody = JSON.stringify({
+            "consumer_key": pocketApiConstants.consumerKey,
+            "code": requestToken
         });
+
+        superagent
+            .post(pocketApiConstants.urls.accessToken)
+            .set(pocketApiConstants.headers)
+            .send(requestBody)
+            .end(function(error, response) {
+                if (error) { callback(error, null); }
+
+                var accessToken = response.body.access_token;
+                console.log('access token: ' + accessToken);
+
+                callback(null, accessToken);
+            });
     }
 
     function getAll(accessToken, callback) {
-        var getDevelopmentLinks = {
-            headers: pocketApiConstants.headers,
-            url: pocketApiConstants.urls.get,
-            body: JSON.stringify({
-                "consumer_key": pocketApiConstants.consumerKey,
-                "access_token": accessToken,
-                "tag": "development"
-            })
-        };
-
-        request.post(getDevelopmentLinks, function(error, response, body) {
-            if (error) { callback(error, null); }
-
-            callback(null, body);
+        var requestBody = JSON.stringify({
+            "consumer_key": pocketApiConstants.consumerKey,
+            "access_token": accessToken,
+            "tag": "development"
         });
+
+        superagent
+            .post(pocketApiConstants.urls.get)
+            .set(pocketApiConstants.headers)
+            .send(requestBody)
+            .end(function(error, response) {
+                if (error) { callback(error, null); }
+
+                callback(null, response.body);
+            });
     }
 
     return module;
