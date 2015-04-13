@@ -7,23 +7,26 @@ var express = require('express'),
 var pocketApi = new PocketApi(pocketApiConsumerKey);
 
 var app = express(),
-    port = 1111,
-    requestToken = '',
-    redirectUri = 'http://localhost:1111/authenticated';
+    port = 1111;
+    //requestToken = '',
+    //redirectUri = 'http://localhost:1111/authenticated';
 
-app.get('/authenticate', function(req, res) {
+app.get('/getRequestToken', function(req, res) {
     pocketApi.getRequestToken(function(error, obtainedRequestToken) {
-        requestToken = obtainedRequestToken;
-        var redirectUrl = 'https://getpocket.com/auth/authorize?request_token=' + obtainedRequestToken + '&redirect_uri=' + redirectUri;
-        res.redirect(redirectUrl);
+        res.send(obtainedRequestToken);
     });
 });
 
-app.get('/authenticated', function(req, res) {
-    pocketApi.getAccessToken(requestToken, function(error, accessToken) {
-        pocketApi.getAll(accessToken, function(error, data) {
-            res.send(data);
-        });
+app.get('/getAccessToken/:requestToken', function(req, res) {
+    console.log(req.params.requestToken);
+    pocketApi.getAccessToken(req.params.requestToken, function(error, accessToken) {
+        res.send(accessToken);
+    });
+});
+
+app.get('/getArticles/:accessToken', function(req, res) {
+    pocketApi.getAll(req.params.accessToken, function(error, data) {
+        res.send(data);
     });
 });
 
