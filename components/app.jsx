@@ -1,13 +1,16 @@
 'use strict';
 
 var React = require('react'),
-    superagent = require('superagent'),
-    queryString = require('query-string');
+    superagent = require('superagent');
 
 var mainContainer = document.getElementById('main-container');
 
 var HomePage = React.createClass({
     connectWithPocket: function() {
+        if (window.localStorage.ACCESS_TOKEN) {
+            alert('Already connected!');
+        }
+
         superagent
             .get('/getRequestToken')
             .end(function(error, response) {
@@ -18,25 +21,24 @@ var HomePage = React.createClass({
                 var pocketAuthorizationUrl = 'https://getpocket.com/auth/authorize?request_token=' + obtainedRequestToken + '&redirect_uri=' + redirectUri;
 
                 window.location = pocketAuthorizationUrl;
+
+                return;
             });
     },
 
     componentDidMount: function() {
-        var parsedQueryString= queryString.parse(location.search);
-
-        if (parsedQueryString.authorizationFinished) {
-
-            if (!window.localStorage.ACCESS_TOKEN) {
-                superagent
-                    .get('/getAccessToken/' + window.sessionStorage.REQUEST_TOKEN)
-                    .end(function(error, response) {
-                        window.localStorage.ACCESS_TOKEN = response.text;
-                        console.log('access token: ' + window.localStorage.ACCESS_TOKEN);
-                    });
-            }
+        if (!window.localStorage.ACCESS_TOKEN) {
+            superagent
+                .get('/getAccessToken/' + window.sessionStorage.REQUEST_TOKEN)
+                .end(function(error, response) {
+                    window.localStorage.ACCESS_TOKEN = response.text;
+                    console.log('access token: ' + window.localStorage.ACCESS_TOKEN);
+                });
         }
 
         if (window.localStorage.ACCESS_TOKEN) {
+            console.log('Authorized !');
+
             superagent
                 .get('/getArticles/' + window.localStorage.ACCESS_TOKEN)
                 .end(function(error, response) {
