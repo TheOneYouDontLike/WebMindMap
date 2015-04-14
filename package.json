@@ -19,6 +19,7 @@
   "homepage": "https://github.com/TheOneYouDontLike/WebMindMap",
   "dependencies": {
     "express": "^4.12.3",
+    "lodash": "^3.6.0",
     "react": "^0.13.1",
     "superagent": "^1.1.0"
   },
