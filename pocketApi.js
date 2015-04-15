@@ -65,7 +65,7 @@ var pocketApi = function(pocketApiConsumerKey) {
         var requestBody = JSON.stringify({
             "consumer_key": pocketApiConstants.consumerKey,
             "access_token": accessToken,
-            "tag": "development"
+            "detailType": "complete"
         });
 
         superagent

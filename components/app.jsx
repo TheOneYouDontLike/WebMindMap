@@ -29,7 +29,8 @@ var HomePage = React.createClass({
 
     getInitialState: function() {
         return {
-            pocketData: {}
+            pocketData: {},
+            allTags: []
         };
     },
 
@@ -51,17 +52,42 @@ var HomePage = React.createClass({
                 .end(function(error, response) {
                     var sortedList = _.toArray(response.body.list);
                     this.setState({ pocketData: sortedList });
+
+                    this._getAllTags();
+
                 }.bind(this));
         }
     },
 
+    _getAllTags: function() {
+        var allTags =
+            _(this.state.pocketData)
+            .compact() //removes undefined
+            .map(function(article) {
+                return _(article.tags).map(function(oneTag) {
+                    return oneTag.tag;
+                }).value();
+            })
+            .flattenDeep()
+            .uniq()
+            .sortBy(function(tag) {
+                return tag;
+            })
+            .value();
+
+        this.setState({ allTags: allTags });
+
+        console.log(allTags);
+    },
+
     render: function() {
+
         var articlesToRender = _.map(this.state.pocketData, function(article) {
             return (
-                <div className="row">
-                    <div className="col s2">{ article.item_id }</div>
-                    <div className="col s4">{ article.given_title }</div>
-                    <div className="col s4">{ article.given_url }</div>
+                <div className="row" key={ article.item_id }>
+                    <div className="col s2"><span className="flow-text">{ article.item_id }</span></div>
+                    <div className="col s4"><span className="flow-text">{ article.given_title }</span></div>
+                    <div className="col s4"><span className="flow-text">{ article.given_url }</span></div>
                 </div>
             );
         });
