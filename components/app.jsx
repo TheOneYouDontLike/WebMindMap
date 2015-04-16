@@ -62,12 +62,13 @@ var HomePage = React.createClass({
     _getAllTags: function() {
         var allTags =
             _(this.state.pocketData)
-            .compact() //removes undefined
             .map(function(article) {
-                return _(article.tags).map(function(oneTag) {
-                    return oneTag.tag;
-                }).value();
+                return _(article.tags)
+                    .map(function(singleTag) {
+                        return singleTag.tag;
+                    }).value();
             })
+            .compact() //removes undefined
             .flattenDeep()
             .uniq()
             .sortBy(function(tag) {
@@ -77,6 +78,22 @@ var HomePage = React.createClass({
 
         this.setState({ allTags: allTags });
 
+        var allArticlesGroupedByTag =
+            _(this.state.pocketData)
+            .filter(function(article) {
+                var tagsArray = _(article.tags)
+                    .map(function(singleTag) {
+                        return singleTag.tag;
+                    }).value();
+
+                return _.contains(tagsArray, 'development');
+            })
+            .value();
+
+        console.log('grouped by tag');
+        console.log(allArticlesGroupedByTag);
+
+        console.log(this.state.pocketData);
         console.log(allTags);
     },
 
@@ -85,9 +102,9 @@ var HomePage = React.createClass({
         var articlesToRender = _.map(this.state.pocketData, function(article) {
             return (
                 <div className="row" key={ article.item_id }>
-                    <div className="col s2"><span className="flow-text">{ article.item_id }</span></div>
-                    <div className="col s4"><span className="flow-text">{ article.given_title }</span></div>
-                    <div className="col s4"><span className="flow-text">{ article.given_url }</span></div>
+                    <div className="col s2"><span>{ article.item_id }</span></div>
+                    <div className="col s4"><span>{ article.given_title }</span></div>
+                    <div className="col s4"><span>{ article.given_url }</span></div>
                 </div>
             );
         });
