@@ -30,7 +30,8 @@ var HomePage = React.createClass({
     getInitialState: function() {
         return {
             pocketData: {},
-            allTags: []
+            allTags: [],
+            tagsWithArticles: []
         };
     },
 
@@ -78,34 +79,35 @@ var HomePage = React.createClass({
 
         this.setState({ allTags: allTags });
 
-        var groupedMovies = [];
+        var groupedArticles = [];
 
-        _.forEach(allTags, function(tag) {
+        _.forEach(this.state.allTags, function(tag) {
 
-            var allArticlesGroupedByTag =
-            _(this.state.pocketData)
-            .filter(function(article) {
-                var tagsArray = _(article.tags)
-                    .map(function(singleTag) {
-                        return singleTag.tag;
-                    }).value();
+            var articlesGroupedByTag =
+                _(this.state.pocketData)
+                .filter(function(article) {
+                    var tagsArray =
+                        _(article.tags)
+                        .map(function(singleTag) {
+                            return singleTag.tag;
+                        }).value();
 
-                return _.contains(tagsArray, tag);
-            })
-            .value();
+                    return _.contains(tagsArray, tag);
+                })
+                .value();
 
             var tagWithArticles = {
                 tagName: tag,
-                articles: allArticlesGroupedByTag
+                articles: articlesGroupedByTag
             };
 
-            groupedMovies.push(tagWithArticles);
+            groupedArticles.push(tagWithArticles);
         }.bind(this));
 
-
+        this.setState({ tagsWithArticles: groupedArticles });
 
         console.log('grouped by tag');
-        console.log(groupedMovies);
+        console.log(groupedArticles);
 
         console.log(this.state.pocketData);
         console.log(allTags);
@@ -113,12 +115,21 @@ var HomePage = React.createClass({
 
     render: function() {
 
-        var articlesToRender = _.map(this.state.pocketData, function(article) {
+        var articlesToRender = _.map(this.state.tagsWithArticles, function(tagWithArticles) {
+            var mappedArticles = _.map(tagWithArticles.articles, function(article) {
+                        return (
+                            <div className="row" key={ article.item_id }>
+                                <div className="col s2"><span>{ article.item_id }</span></div>
+                                <div className="col s4"><span>{ article.given_title }</span></div>
+                                <div className="col s4"><span>{ article.given_url }</span></div>
+                            </div>
+                        );
+                    });
+
             return (
-                <div className="row" key={ article.item_id }>
-                    <div className="col s2"><span>{ article.item_id }</span></div>
-                    <div className="col s4"><span>{ article.given_title }</span></div>
-                    <div className="col s4"><span>{ article.given_url }</span></div>
+                <div>
+                    <h2>{ tagWithArticles.tagName }</h2>
+                    { mappedArticles }
                 </div>
             );
         });
