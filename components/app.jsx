@@ -78,7 +78,11 @@ var HomePage = React.createClass({
 
         this.setState({ allTags: allTags });
 
-        var allArticlesGroupedByTag =
+        var groupedMovies = [];
+
+        _.forEach(allTags, function(tag) {
+
+            var allArticlesGroupedByTag =
             _(this.state.pocketData)
             .filter(function(article) {
                 var tagsArray = _(article.tags)
@@ -86,12 +90,22 @@ var HomePage = React.createClass({
                         return singleTag.tag;
                     }).value();
 
-                return _.contains(tagsArray, 'development');
+                return _.contains(tagsArray, tag);
             })
             .value();
 
+            var tagWithArticles = {
+                tagName: tag,
+                articles: allArticlesGroupedByTag
+            };
+
+            groupedMovies.push(tagWithArticles);
+        }.bind(this));
+
+
+
         console.log('grouped by tag');
-        console.log(allArticlesGroupedByTag);
+        console.log(groupedMovies);
 
         console.log(this.state.pocketData);
         console.log(allTags);
