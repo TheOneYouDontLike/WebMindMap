@@ -2,7 +2,7 @@
 
 var express              = require('express'),
     PocketApi            = require('./pocketApi.js'),
-    PocketDataMapper      = require('./pocketDataMapper.js'),
+    PocketDataMapper     = require('./pocketDataMapper.js'),
     pocketApiConsumerKey = require('./consumerKey.js');
 
 var pocketApi = new PocketApi(pocketApiConsumerKey);

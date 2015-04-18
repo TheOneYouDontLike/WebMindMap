@@ -58,32 +58,43 @@ var HomePage = React.createClass({
     },
 
     render: function() {
-
         var articlesToRender = _.map(this.state.pocketData, function(tagWithArticles) {
             var mappedArticles = _.map(tagWithArticles.articles, function(article) {
                 return (
-                    <div className="row" key={ article.item_id }>
-                        <div className="col s2"><span>{ article.item_id }</span></div>
-                        <div className="col s4"><span>{ article.given_title }</span></div>
-                        <div className="col s4"><span>{ article.given_url }</span></div>
-                    </div>
+                    <li className="collection-item" key={ article.item_id }>
+                        <a href={ article.given_url }>{ article.given_title }</a>
+                    </li>
                 );
             });
 
             return (
-                <div key={ tagWithArticles.tagName }>
-                    <h2>{ tagWithArticles.tagName }</h2>
-                    { mappedArticles }
+                <div className="card" key={ tagWithArticles.tagName }>
+                    <div className="card-content">
+                        <h2 className="card-title black-text">{ tagWithArticles.tagName }</h2>
+                        <ul className="collection" >
+                            { mappedArticles }
+                        </ul>
+                    </div>
                 </div>
             );
         });
+
+        var loadingIndicator = <div className="progress"><div className="indeterminate"></div></div>;
+
+        var content = {};
+
+        if(articlesToRender.length > 0) {
+            content = articlesToRender;
+        } else {
+            content = loadingIndicator;
+        }
 
         return (
             <div className="HomePage">
                 <h1>Web Mind Map</h1>
                 <p>Connect with your pocket app</p>
-                <button type="button" onClick={this._connectWithPocket}>Connect</button>
-                { articlesToRender }
+                <button type="button" onClick={ this._connectWithPocket }>Connect</button>
+                { content }
             </div>
         );
     }
