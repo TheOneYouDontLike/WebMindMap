@@ -29,9 +29,7 @@ var HomePage = React.createClass({
 
     getInitialState: function() {
         return {
-            pocketData: {},
-            allTags: [],
-            tagsWithArticles: []
+            pocketData: {}
         };
     },
 
@@ -51,83 +49,29 @@ var HomePage = React.createClass({
             superagent
                 .get('/getArticles/' + window.localStorage.ACCESS_TOKEN)
                 .end(function(error, response) {
-                    var sortedList = _.toArray(response.body.list);
-                    this.setState({ pocketData: sortedList });
 
-                    this._getAllTags();
+                    console.log(response);
+                    this.setState({ pocketData: response.body });
 
                 }.bind(this));
         }
     },
 
-    _getAllTags: function() {
-        var allTags =
-            _(this.state.pocketData)
-            .map(function(article) {
-                return _(article.tags)
-                    .map(function(singleTag) {
-                        return singleTag.tag;
-                    }).value();
-            })
-            .compact() //removes undefined
-            .flattenDeep()
-            .uniq()
-            .sortBy(function(tag) {
-                return tag;
-            })
-            .value();
-
-        this.setState({ allTags: allTags });
-
-        var groupedArticles = [];
-
-        _.forEach(this.state.allTags, function(tag) {
-
-            var articlesGroupedByTag =
-                _(this.state.pocketData)
-                .filter(function(article) {
-                    var tagsArray =
-                        _(article.tags)
-                        .map(function(singleTag) {
-                            return singleTag.tag;
-                        }).value();
-
-                    return _.contains(tagsArray, tag);
-                })
-                .value();
-
-            var tagWithArticles = {
-                tagName: tag,
-                articles: articlesGroupedByTag
-            };
-
-            groupedArticles.push(tagWithArticles);
-        }.bind(this));
-
-        this.setState({ tagsWithArticles: groupedArticles });
-
-        console.log('grouped by tag');
-        console.log(groupedArticles);
-
-        console.log(this.state.pocketData);
-        console.log(allTags);
-    },
-
     render: function() {
 
-        var articlesToRender = _.map(this.state.tagsWithArticles, function(tagWithArticles) {
+        var articlesToRender = _.map(this.state.pocketData, function(tagWithArticles) {
             var mappedArticles = _.map(tagWithArticles.articles, function(article) {
-                        return (
-                            <div className="row" key={ article.item_id }>
-                                <div className="col s2"><span>{ article.item_id }</span></div>
-                                <div className="col s4"><span>{ article.given_title }</span></div>
-                                <div className="col s4"><span>{ article.given_url }</span></div>
-                            </div>
-                        );
-                    });
+                return (
+                    <div className="row" key={ article.item_id }>
+                        <div className="col s2"><span>{ article.item_id }</span></div>
+                        <div className="col s4"><span>{ article.given_title }</span></div>
+                        <div className="col s4"><span>{ article.given_url }</span></div>
+                    </div>
+                );
+            });
 
             return (
-                <div>
+                <div key={ tagWithArticles.tagName }>
                     <h2>{ tagWithArticles.tagName }</h2>
                     { mappedArticles }
                 </div>
