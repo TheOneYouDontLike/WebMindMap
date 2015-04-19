@@ -5,7 +5,7 @@ var express              = require('express'),
     PocketDataMapper     = require('./pocketDataMapper.js'),
     pocketApiConsumerKey = require('./consumerKey.js');
 
-var pocketApi = new PocketApi(pocketApiConsumerKey);
+var pocketApi = new PocketApi(pocketApiConsumerKey, { dataSource: 'file' });
 var pocketDataMapper = new PocketDataMapper();
 
 var app = express(),

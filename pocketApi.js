@@ -1,8 +1,9 @@
 'use strict';
 
-var superagent = require('superagent');
+var superagent = require('superagent'),
+    fs         = require('fs');
 
-var pocketApi = function(pocketApiConsumerKey) {
+var pocketApi = function(pocketApiConsumerKey, options) {
     var module = {},
         pocketApiConstants = {
             headers: {
@@ -62,6 +63,17 @@ var pocketApi = function(pocketApiConsumerKey) {
     }
 
     function getAll(accessToken, callback) {
+        if (options.dataSource === 'file') {
+            fs.readFile('temp.json', function(error, data) {
+                if (error) { callback(error, null); }
+
+                console.log('using temp data file');
+                callback(null, JSON.parse(data));
+            });
+
+            return;
+        }
+
         var requestBody = JSON.stringify({
             "consumer_key": pocketApiConstants.consumerKey,
             "access_token": accessToken,
