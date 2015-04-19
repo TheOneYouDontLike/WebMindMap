@@ -32,5 +32,6 @@ WebMindMap.sublime-workspace
 
 #app stuff
 public/*
+!public/index.html
 consumerKey.js
 temp.json

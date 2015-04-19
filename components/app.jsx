@@ -10,6 +10,8 @@ var HomePage = React.createClass({
     _connectWithPocket: function() {
         if (window.localStorage.ACCESS_TOKEN) {
             alert('Already connected!');
+
+            return;
         }
 
         superagent
@@ -49,10 +51,7 @@ var HomePage = React.createClass({
             superagent
                 .get('/getArticles/' + window.localStorage.ACCESS_TOKEN)
                 .end(function(error, response) {
-
-                    console.log(response);
                     this.setState({ pocketData: response.body });
-
                 }.bind(this));
         }
     },
@@ -68,12 +67,14 @@ var HomePage = React.createClass({
             });
 
             return (
-                <div className="card" key={ tagWithArticles.tagName }>
-                    <div className="card-content">
-                        <h2 className="card-title black-text">{ tagWithArticles.tagName }</h2>
-                        <ul className="collection" >
-                            { mappedArticles }
-                        </ul>
+                <div className="card-wrapper" key={ tagWithArticles.tagName }>
+                    <div className="card">
+                        <div className="card-content">
+                            <h2 className="card-title black-text">{ tagWithArticles.tagName }</h2>
+                            <ul className="collection" >
+                                { mappedArticles }
+                            </ul>
+                        </div>
                     </div>
                 </div>
             );
@@ -94,7 +95,9 @@ var HomePage = React.createClass({
                 <h1>Web Mind Map</h1>
                 <p>Connect with your pocket app</p>
                 <button type="button" onClick={ this._connectWithPocket }>Connect</button>
-                { content }
+                <div className="horizontal-wrapper">
+                    { content }
+                </div>
             </div>
         );
     }
