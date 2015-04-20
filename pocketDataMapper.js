@@ -2,6 +2,8 @@
 
 var _ = require('lodash');
 
+var NO_TAGS_ARRAY = ['_no_tags'];
+
 var PocketDataMapper = function() {
     var module = {};
 
@@ -15,6 +17,10 @@ var PocketDataMapper = function() {
         var allTags =
             _(listOfArticles)
             .map(function(article) {
+                if(!article.tags) {
+                    return NO_TAGS_ARRAY;
+                }
+
                 var tagsArray = _extractTagsFromArticle(article);
 
                 return tagsArray;
@@ -51,6 +57,10 @@ var PocketDataMapper = function() {
     }
 
     function _extractTagsFromArticle(article) {
+        if(!article.tags) {
+            return NO_TAGS_ARRAY;
+        }
+
         var tags =
             _(article.tags)
             .map(function(singleTag) {
