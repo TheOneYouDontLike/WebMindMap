@@ -59,9 +59,10 @@ var HomePage = React.createClass({
     render: function() {
         var articlesToRender = _.map(this.state.pocketData, function(tagWithArticles) {
             var mappedArticles = _.map(tagWithArticles.articles, function(article) {
+                var title = article.given_title ? article.given_title : article.given_url;
                 return (
                     <li className="collection-item" key={ article.item_id }>
-                        <a href={ article.given_url }>{ article.given_title }</a>
+                        <a href={ article.given_url }>{ title }</a>
                     </li>
                 );
             });
