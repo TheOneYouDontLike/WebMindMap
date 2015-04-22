@@ -21,6 +21,7 @@ var pocketApi = function(pocketApiConsumerKey, options) {
     module.getRequestToken = getRequestToken;
     module.getAccessToken = getAccessToken;
     module.getAll = getAll;
+    module.performAction = performAction;
 
     function getRequestToken(callback) {
         var requestBody = JSON.stringify({
@@ -33,7 +34,7 @@ var pocketApi = function(pocketApiConsumerKey, options) {
             .set(pocketApiConstants.headers)
             .send(requestBody)
             .end(function(error, response) {
-                if (error) { callback(error, null); }
+                if (error) { callback(error, null); return; }
 
                 var requestToken = response.body.code;
                 console.log('requestToken:' + requestToken);
@@ -53,7 +54,7 @@ var pocketApi = function(pocketApiConsumerKey, options) {
             .set(pocketApiConstants.headers)
             .send(requestBody)
             .end(function(error, response) {
-                if (error) { callback(error, null); }
+                if (error) { callback(error, null); return; }
 
                 var accessToken = response.body.access_token;
                 console.log('access token: ' + accessToken);
@@ -65,7 +66,7 @@ var pocketApi = function(pocketApiConsumerKey, options) {
     function getAll(accessToken, callback) {
         if (options.dataSource === 'file') {
             fs.readFile('temp.json', function(error, data) {
-                if (error) { callback(error, null); }
+                if (error) { callback(error, null); return; }
 
                 console.log('using temp data file');
                 callback(null, JSON.parse(data));
@@ -85,9 +86,29 @@ var pocketApi = function(pocketApiConsumerKey, options) {
             .set(pocketApiConstants.headers)
             .send(requestBody)
             .end(function(error, response) {
-                if (error) { callback(error, null); }
+                if (error) { callback(error, null); return; }
 
                 callback(null, response.body);
+            });
+    }
+
+    function performAction(action, accessToken, callback) {
+        var actionsToPerform = [action];
+
+        var requestBody = JSON.stringify({
+            "consumer_key": pocketApiConstants.consumerKey,
+            "access_token": accessToken,
+            "actions": actionsToPerform
+        });
+
+        superagent
+            .post('https://getpocket.com/v3/send')
+            .set(pocketApiConstants.headers)
+            .send(requestBody)
+            .end(function(error, response) {
+                if (error) { callback(error, null); return; }
+
+                callback(null, response.body.actionResults);
             });
     }
 

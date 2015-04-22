@@ -57,15 +57,19 @@ var HomePage = React.createClass({
     },
 
     _archiveArticle: function(articleId) {
-        console.log('to archive: ' + articleId);
+        var archiveRequestBody = {
+            accessToken: window.localStorage.ACCESS_TOKEN,
+            articleId: articleId
+        };
+
         superagent
             .post('/archiveArticle')
-            .send({ articleId: articleId })
-            .end(function(error, respose) {
+            .send(archiveRequestBody)
+            .end(function(error, response) {
                 if(error) { alert(error); return; }
 
-                alert('Archived!');
-                console.log(response);
+                alert(response.text);
+                window.location.reload(); //TODO: for now
             });
     },
 

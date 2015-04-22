@@ -37,8 +37,15 @@ app.get('/getArticles/:accessToken', function(req, res) {
 });
 
 app.post('/archiveArticle', function(req, res) {
-    console.log(req.body.articleId);
-    res.send('confirmed');
+    var action = {
+        action : 'archive',
+        item_id : req.body.articleId,
+    };
+
+    pocketApi.performAction(action, req.body.accessToken, function(error, data) {
+        if (error) { console.log('logging error: '); console.log(error); }
+        res.send('Archived!');
+    });
 });
 
 // VIEWS
