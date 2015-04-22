@@ -43,7 +43,7 @@ app.post('/archiveArticle', function(req, res) {
     };
 
     pocketApi.performAction(action, req.body.accessToken, function(error, data) {
-        if (error) { console.log('logging error: '); console.log(error); }
+        if (error) { console.log('logging error: '); console.log(error); res.send(error.message); }
         res.send('Archived!');
     });
 });
