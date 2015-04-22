@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/TheOneYouDontLike/WebMindMap",
   "dependencies": {
+    "body-parser": "^1.12.3",
     "express": "^4.12.3",
     "lodash": "^3.6.0",
     "react": "^0.13.1",

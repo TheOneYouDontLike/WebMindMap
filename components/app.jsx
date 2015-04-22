@@ -56,16 +56,33 @@ var HomePage = React.createClass({
         }
     },
 
+    _archiveArticle: function(articleId) {
+        console.log('to archive: ' + articleId);
+        superagent
+            .post('/archiveArticle')
+            .send({ articleId: articleId })
+            .end(function(error, respose) {
+                if(error) { alert(error); return; }
+
+                alert('Archived!');
+                console.log(response);
+            });
+    },
+
     render: function() {
         var articlesToRender = _.map(this.state.pocketData, function(tagWithArticles) {
             var mappedArticles = _.map(tagWithArticles.articles, function(article) {
                 var title = article.given_title ? article.given_title : article.given_url;
+                var archive_link = '/archive/' + article.item_id;
+
                 return (
                     <li className="collection-item" key={ article.item_id }>
                         <a href={ article.given_url }>{ title }</a>
+                        <hr />
+                        <button className="btn" type="button" onClick={ this._archiveArticle.bind(null, article.item_id) }>Archive</button>
                     </li>
                 );
-            });
+            }.bind(this));
 
             return (
                 <div className="card-wrapper" key={ tagWithArticles.tagName }>
@@ -79,7 +96,7 @@ var HomePage = React.createClass({
                     </div>
                 </div>
             );
-        });
+        }.bind(this));
 
         var loadingIndicator = <div className="progress"><div className="indeterminate"></div></div>;
 

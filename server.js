@@ -1,15 +1,19 @@
 'use strict';
 
 var express              = require('express'),
+    bodyParser           = require('body-parser'),
     PocketApi            = require('./pocketApi.js'),
     PocketDataMapper     = require('./pocketDataMapper.js'),
     pocketApiConsumerKey = require('./consumerKey.js');
 
-var pocketApi = new PocketApi(pocketApiConsumerKey, { dataSource: 'file' });
+var pocketApi = new PocketApi(pocketApiConsumerKey, { });
 var pocketDataMapper = new PocketDataMapper();
 
 var app = express(),
     port = 1111;
+
+// config
+app.use(bodyParser.json());
 
 app.get('/getRequestToken', function(req, res) {
     pocketApi.getRequestToken(function(error, obtainedRequestToken) {
@@ -30,6 +34,11 @@ app.get('/getArticles/:accessToken', function(req, res) {
 
         res.send(articlesGroupedByTags);
     });
+});
+
+app.post('/archiveArticle', function(req, res) {
+    console.log(req.body.articleId);
+    res.send('confirmed');
 });
 
 // VIEWS
