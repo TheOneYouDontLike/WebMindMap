@@ -64,6 +64,18 @@ app.post('/deleteArticle', function(req, res) {
     });
 });
 
+app.post('/favoriteArticle', function(req, res) {
+    var action = {
+        action : 'favorite',
+        item_id : req.body.articleId,
+    };
+
+    pocketApi.performAction(action, req.body.accessToken, function(error, data) {
+        if (error) { console.log('logging error: '); console.log(error); res.send(error.message); }
+        res.send('Favorited!');
+    });
+});
+
 // VIEWS
 app.use(express.static('public'));
 

@@ -90,20 +90,48 @@ var HomePage = React.createClass({
             });
     },
 
+    _favoriteArticle: function(articleId) {
+        var deleteRequestBody = {
+            accessToken: window.localStorage.ACCESS_TOKEN,
+            articleId: articleId
+        };
+
+        superagent
+            .post('/favoriteArticle')
+            .send(deleteRequestBody)
+            .end(function(error, response) {
+                if(error) { alert(error); return; }
+
+                alert(response.text);
+                window.location.reload(); //TODO: for now
+            });
+    },
+
     render: function() {
         var articlesToRender = _.map(this.state.pocketData, function(tagWithArticles) {
             var mappedArticles = _.map(tagWithArticles.articles, function(article) {
                 var title = article.given_title ? article.given_title : article.given_url;
 
+                var favoriteIcon = {};
+
+                if(article.favorite === '1') {
+                    favoriteIcon = <i className="mdi-action-favorite red-text"></i>;
+                } else {
+                    favoriteIcon = <i className="mdi-action-favorite-outline"></i>;
+                }
+
                 return (
                     <li className="collection-item" key={ article.item_id }>
                         <a href={ article.given_url }>{ title }</a>
                         <hr />
-                        <button className="btn" type="button" onClick={ this._archiveArticle.bind(null, article.item_id) }>
+                        <button className="btn-flat" type="button" onClick={ this._archiveArticle.bind(null, article.item_id) }>
                             <i className="mdi-action-done"></i>
                         </button>
-                        <button className="btn" type="button" onClick={ this._deleteArticle.bind(null, article.item_id) }>
+                        <button className="btn-flat" type="button" onClick={ this._deleteArticle.bind(null, article.item_id) }>
                             <i className="mdi-action-delete"></i>
+                        </button>
+                        <button className="btn-flat" type="button" onClick={ this._favoriteArticle.bind(null, article.item_id) }>
+                            { favoriteIcon }
                         </button>
                     </li>
                 );
