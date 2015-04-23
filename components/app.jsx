@@ -120,9 +120,14 @@ var HomePage = React.createClass({
                     favoriteIcon = <i className="mdi-action-favorite-outline"></i>;
                 }
 
+                var aTagStyle = {
+                    'white-space': 'normal',
+                    'text-transform': 'none'
+                };
+
                 return (
                     <li className="collection-item" key={ article.item_id }>
-                        <a href={ article.given_url }>{ title }</a>
+                        <a href={ article.given_url } style={ aTagStyle }>{ title }</a>
                         <hr />
                         <button className="btn-flat" type="button" onClick={ this._archiveArticle.bind(null, article.item_id) }>
                             <i className="mdi-action-done"></i>
