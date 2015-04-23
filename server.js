@@ -6,7 +6,11 @@ var express              = require('express'),
     PocketDataMapper     = require('./pocketDataMapper.js'),
     pocketApiConsumerKey = require('./consumerKey.js');
 
-var pocketApi = new PocketApi(pocketApiConsumerKey, { });
+var dataSource = {
+    //dataSource: 'file'
+};
+
+var pocketApi = new PocketApi(pocketApiConsumerKey, dataSource);
 var pocketDataMapper = new PocketDataMapper();
 
 var app = express(),
@@ -45,6 +49,18 @@ app.post('/archiveArticle', function(req, res) {
     pocketApi.performAction(action, req.body.accessToken, function(error, data) {
         if (error) { console.log('logging error: '); console.log(error); res.send(error.message); }
         res.send('Archived!');
+    });
+});
+
+app.post('/deleteArticle', function(req, res) {
+    var action = {
+        action : 'delete',
+        item_id : req.body.articleId,
+    };
+
+    pocketApi.performAction(action, req.body.accessToken, function(error, data) {
+        if (error) { console.log('logging error: '); console.log(error); res.send(error.message); }
+        res.send('Deleted!');
     });
 });
 

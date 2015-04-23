@@ -73,17 +73,38 @@ var HomePage = React.createClass({
             });
     },
 
+    _deleteArticle: function(articleId) {
+        var deleteRequestBody = {
+            accessToken: window.localStorage.ACCESS_TOKEN,
+            articleId: articleId
+        };
+
+        superagent
+            .post('/deleteArticle')
+            .send(deleteRequestBody)
+            .end(function(error, response) {
+                if(error) { alert(error); return; }
+
+                alert(response.text);
+                window.location.reload(); //TODO: for now
+            });
+    },
+
     render: function() {
         var articlesToRender = _.map(this.state.pocketData, function(tagWithArticles) {
             var mappedArticles = _.map(tagWithArticles.articles, function(article) {
                 var title = article.given_title ? article.given_title : article.given_url;
-                var archive_link = '/archive/' + article.item_id;
 
                 return (
                     <li className="collection-item" key={ article.item_id }>
                         <a href={ article.given_url }>{ title }</a>
                         <hr />
-                        <button className="btn" type="button" onClick={ this._archiveArticle.bind(null, article.item_id) }>Archive</button>
+                        <button className="btn" type="button" onClick={ this._archiveArticle.bind(null, article.item_id) }>
+                            <i className="mdi-action-done"></i>
+                        </button>
+                        <button className="btn" type="button" onClick={ this._deleteArticle.bind(null, article.item_id) }>
+                            <i className="mdi-action-delete"></i>
+                        </button>
                     </li>
                 );
             }.bind(this));
