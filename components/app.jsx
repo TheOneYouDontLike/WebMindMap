@@ -166,11 +166,14 @@ var HomePage = React.createClass({
             content = loadingIndicator;
         }
 
+        var shouldDisplayConnectButton = !window.localStorage.ACCESS_TOKEN;
+
         return (
             <div className="HomePage">
-                <h1>Web Mind Map</h1>
-                <p>Connect with your pocket app</p>
-                <button type="button" onClick={ this._connectWithPocket }>Connect</button>
+                <div className="container">
+                    <h1>Web Mind Map</h1>
+                    { shouldDisplayConnectButton ? <div><p>Connect with your pocket app</p><button type="button" onClick={ this._connectWithPocket }>Connect</button></div> : null }
+                </div>
                 <div className="horizontal-wrapper">
                     { content }
                 </div>
