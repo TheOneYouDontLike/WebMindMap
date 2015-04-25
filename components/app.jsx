@@ -91,14 +91,14 @@ var HomePage = React.createClass({
     },
 
     _favoriteArticle: function(articleId) {
-        var deleteRequestBody = {
+        var favoriteRequestBody = {
             accessToken: window.localStorage.ACCESS_TOKEN,
             articleId: articleId
         };
 
         superagent
             .post('/favoriteArticle')
-            .send(deleteRequestBody)
+            .send(favoriteRequestBody)
             .end(function(error, response) {
                 if(error) { alert(error); return; }
 
@@ -157,22 +157,20 @@ var HomePage = React.createClass({
         }.bind(this));
 
         var loadingIndicator = <div className="progress"><div className="indeterminate"></div></div>;
+        var connectButton = !window.localStorage.ACCESS_TOKEN ? <div><p>Connect with your pocket app</p><button type="button" onClick={ this._connectWithPocket }>Connect</button></div> : null;
 
         var content = {};
-
         if(articlesToRender.length > 0) {
             content = articlesToRender;
         } else {
             content = loadingIndicator;
         }
 
-        var shouldDisplayConnectButton = !window.localStorage.ACCESS_TOKEN;
-
         return (
             <div className="HomePage">
                 <div className="container">
                     <h1>Web Mind Map</h1>
-                    { shouldDisplayConnectButton ? <div><p>Connect with your pocket app</p><button type="button" onClick={ this._connectWithPocket }>Connect</button></div> : null }
+                    { connectButton }
                 </div>
                 <div className="horizontal-wrapper">
                     { content }

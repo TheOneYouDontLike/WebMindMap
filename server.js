@@ -7,7 +7,7 @@ var express              = require('express'),
     pocketApiConsumerKey = require('./consumerKey.js');
 
 var dataSource = {
-    //dataSource: 'file'
+    dataSource: 'file'
 };
 
 var pocketApi = new PocketApi(pocketApiConsumerKey, dataSource);
