@@ -121,8 +121,8 @@ var HomePage = React.createClass({
                 }
 
                 var aTagStyle = {
-                    'white-space': 'normal',
-                    'text-transform': 'none'
+                    'whiteSpace': 'normal',
+                    'textTransform': 'none'
                 };
 
                 return (
@@ -172,8 +172,19 @@ var HomePage = React.createClass({
                     <h1>Web Mind Map</h1>
                     { connectButton }
                 </div>
+                <div className="col">
+                    <ul className="tabs">
+                        <li className="tab col"><a href="#all">All</a></li>
+                        <li className="tab col"><a href="#archived">Archived</a></li>
+                    </ul>
+                </div>
                 <div className="horizontal-wrapper">
-                    { content }
+                    <div id="all">
+                        { content }
+                    </div>
+                    <div id="archived">
+                        PLACEHOLDER
+                    </div>
                 </div>
             </div>
         );
