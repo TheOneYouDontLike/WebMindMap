@@ -108,7 +108,7 @@ var HomePage = React.createClass({
     },
 
     render: function() {
-        var articlesToRender = _.map(this.state.pocketData, function(tagWithArticles) {
+        var articlesToRender = _.map(this.state.pocketData.normalArticles, function(tagWithArticles) {
             var mappedArticles = _.map(tagWithArticles.articles, function(article) {
                 var title = article.given_title ? article.given_title : article.given_url;
 

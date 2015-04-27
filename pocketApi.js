@@ -64,8 +64,8 @@ var pocketApi = function(pocketApiConsumerKey, options) {
     }
 
     function getAll(accessToken, callback) {
-        if (options.dataSource === 'file') {
-            fs.readFile('temp.json', function(error, data) {
+        if (options.dataSource) {
+            fs.readFile(options.dataSource, function(error, data) {
                 if (error) { callback(error, null); return; }
 
                 console.log('using temp data file');

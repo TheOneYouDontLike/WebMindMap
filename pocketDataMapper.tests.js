@@ -23,7 +23,7 @@ describe('pocketDataMapper', function() {
     });
 
     it('should map', function(done) {
-        var articles = pocketDataMapper.groupByTags({list: parsedFile});
+        var articles = pocketDataMapper.groupByTags(parsedFile);
         console.log(articles);
     });
 });

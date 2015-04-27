@@ -14,8 +14,8 @@ var PocketDataMapper = function() {
     function groupByTags(pocketData) {
         var listOfArticles = _.toArray(pocketData.list);
 
-        var DEFAULT_STATUS = 0;
-        var ARCHIVED_STATUS = 1;
+        var DEFAULT_STATUS = '0';
+        var ARCHIVED_STATUS = '1';
 
         var normalArticles = _.filter(listOfArticles, function(article) {
             return article.status === DEFAULT_STATUS;
@@ -25,15 +25,11 @@ var PocketDataMapper = function() {
             return article.status === ARCHIVED_STATUS;
         });
 
-        console.log('after filtering');
-
         var normalTags = _getTags(normalArticles);
         var archivedTags = _getTags(archivedArticles);
 
         var normalArticlesGroupedByTags = _groupByTags(normalTags, normalArticles);
         var archivedArticlesGroupedByTags = _groupByTags(archivedTags, archivedArticles);
-
-        console.log('after grouping');
 
         var articlesDividedByState = {
             normalArticles: normalArticlesGroupedByTags,
