@@ -8,6 +8,7 @@ var express              = require('express'),
 
 var dataSource = {
     dataSource: 'file'
+    //saveToFile: true
 };
 
 var pocketApi = new PocketApi(pocketApiConsumerKey, dataSource);
@@ -36,7 +37,7 @@ app.get('/getArticles/:accessToken', function(req, res) {
     pocketApi.getAll(req.params.accessToken, function(error, data) {
         var articlesGroupedByTags = pocketDataMapper.groupByTags(data);
 
-        res.send(articlesGroupedByTags);
+        res.send(articlesGroupedByTags.normalArticles);
     });
 });
 

@@ -14,6 +14,36 @@ var PocketDataMapper = function() {
     function groupByTags(pocketData) {
         var listOfArticles = _.toArray(pocketData.list);
 
+        var DEFAULT_STATUS = 0;
+        var ARCHIVED_STATUS = 1;
+
+        var normalArticles = _.filter(listOfArticles, function(article) {
+            return article.status === DEFAULT_STATUS;
+        });
+
+        var archivedArticles = _.filter(listOfArticles, function(article) {
+            return article.status === ARCHIVED_STATUS;
+        });
+
+        console.log('after filtering');
+
+        var normalTags = _getTags(normalArticles);
+        var archivedTags = _getTags(archivedArticles);
+
+        var normalArticlesGroupedByTags = _groupByTags(normalTags, normalArticles);
+        var archivedArticlesGroupedByTags = _groupByTags(archivedTags, archivedArticles);
+
+        console.log('after grouping');
+
+        var articlesDividedByState = {
+            normalArticles: normalArticlesGroupedByTags,
+            archivedArticles: archivedArticlesGroupedByTags
+        };
+
+        return articlesDividedByState;
+    }
+
+    function _getTags(listOfArticles) {
         var allTags =
             _(listOfArticles)
             .map(function(article) {
@@ -33,25 +63,29 @@ var PocketDataMapper = function() {
             })
             .value();
 
+        return allTags;
+    }
+
+    function _groupByTags(tags, articles) {
         var groupedArticles = [];
-            _.forEach(allTags, function(tag) {
+        _.forEach(tags, function(tag) {
 
-                var articlesGroupedByTag =
-                    _(listOfArticles)
-                    .filter(function(article) {
-                        var tagsArray = _extractTagsFromArticle(article);
+            var articlesGroupedByTag =
+                _(articles)
+                .filter(function(article) {
+                    var tagsArray = _extractTagsFromArticle(article);
 
-                        return _.contains(tagsArray, tag);
-                    })
-                    .value();
+                    return _.contains(tagsArray, tag);
+                })
+                .value();
 
-                var tagWithArticles = {
-                    tagName: tag,
-                    articles: articlesGroupedByTag
-                };
+            var tagWithArticles = {
+                tagName: tag,
+                articles: articlesGroupedByTag
+            };
 
-                groupedArticles.push(tagWithArticles);
-            });
+            groupedArticles.push(tagWithArticles);
+        });
 
         return groupedArticles;
     }

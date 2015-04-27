@@ -34,4 +34,4 @@ WebMindMap.sublime-workspace
 public/*
 !public/index.html
 consumerKey.js
-temp.json
+temp*.json

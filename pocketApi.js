@@ -78,7 +78,8 @@ var pocketApi = function(pocketApiConsumerKey, options) {
         var requestBody = JSON.stringify({
             "consumer_key": pocketApiConstants.consumerKey,
             "access_token": accessToken,
-            "detailType": "complete"
+            "detailType": "complete",
+            "state": "all"
         });
 
         superagent
@@ -87,6 +88,13 @@ var pocketApi = function(pocketApiConsumerKey, options) {
             .send(requestBody)
             .end(function(error, response) {
                 if (error) { callback(error, null); return; }
+                console.log('got something');
+
+                if(options.saveToFile) {
+                    fs.writeFile('temp.json', JSON.stringify(response.body), function() {
+                        console.log('saved to file');
+                    });
+                }
 
                 callback(null, response.body);
             });
