@@ -1,7 +1,8 @@
 'use strict';
 
-var React = require('react'),
-    _ = require('lodash');
+var React      = require('react'),
+    _          = require('lodash'),
+    superagent = require('superagent');
 
 var Articles = React.createClass({
     getDefaultProps: function() {
@@ -88,7 +89,7 @@ var Articles = React.createClass({
 
                 return (
                     <li className="collection-item" key={ article.item_id }>
-                        <a href={ article.given_url } style={ aTagStyle }>{ title }</a>
+                        <a href={ article.given_url } style={ aTagStyle } target="_blank">{ title }</a>
                         <hr />
                         { archiveButton }
                         <button className="btn-flat" type="button" onClick={ this._deleteArticle.bind(null, article.item_id) }>
