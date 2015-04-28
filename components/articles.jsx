@@ -4,7 +4,13 @@ var React = require('react'),
     _ = require('lodash');
 
 var Articles = React.createClass({
-     _archiveArticle: function(articleId) {
+    getDefaultProps: function() {
+        return {
+            archived: false
+        };
+    },
+
+    _archiveArticle: function(articleId) {
         var archiveRequestBody = {
             accessToken: window.localStorage.ACCESS_TOKEN,
             articleId: articleId
@@ -63,7 +69,7 @@ var Articles = React.createClass({
                 var favoriteIcon = {};
 
                 if(article.favorite === '1') {
-                    favoriteIcon = <i className="mdi-action-favorite red-text"></i>;
+                    favoriteIcon = <i className="mdi-action-favorite red-text"k></i>;
                 } else {
                     favoriteIcon = <i className="mdi-action-favorite-outline"></i>;
                 }
@@ -73,13 +79,18 @@ var Articles = React.createClass({
                     'textTransform': 'none'
                 };
 
+                var archiveButton = {};
+                if(!this.props.archived) {
+                    archiveButton = <button className="btn-flat" type="button" onClick={ this._archiveArticle.bind(null, article.item_id) }>
+                                        <i className="mdi-action-done"></i>
+                                    </button>;
+                }
+
                 return (
                     <li className="collection-item" key={ article.item_id }>
                         <a href={ article.given_url } style={ aTagStyle }>{ title }</a>
                         <hr />
-                        <button className="btn-flat" type="button" onClick={ this._archiveArticle.bind(null, article.item_id) }>
-                            <i className="mdi-action-done"></i>
-                        </button>
+                        { archiveButton }
                         <button className="btn-flat" type="button" onClick={ this._deleteArticle.bind(null, article.item_id) }>
                             <i className="mdi-action-delete"></i>
                         </button>

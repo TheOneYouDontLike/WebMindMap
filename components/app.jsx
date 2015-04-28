@@ -62,7 +62,7 @@ var HomePage = React.createClass({
 
     render: function() {
         var normalArticlesToRender = <Articles articles={ this.state.pocketData.normalArticles } />;
-        var archivedArticlesToRender = <Articles articles={ this.state.pocketData.archivedArticles } />;
+        var archivedArticlesToRender = <Articles articles={ this.state.pocketData.archivedArticles } archived={ true }/>;
         var loadingIndicator = <div className="progress"><div className="indeterminate"></div></div>;
         var connectButton = !window.localStorage.ACCESS_TOKEN ? <div><p>Connect with your pocket app</p><button type="button" onClick={ this._connectWithPocket }>Connect</button></div> : null;
 
