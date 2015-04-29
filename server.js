@@ -7,7 +7,7 @@ var express              = require('express'),
     pocketApiConsumerKey = require('./consumerKey.js');
 
 var dataSource = {
-    //dataSource: 'temp.json'
+    dataSource: 'temp.json'
     //saveToFile: true
 };
 

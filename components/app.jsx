@@ -35,7 +35,8 @@ var HomePage = React.createClass({
             pocketData: {
                 normalArticles: [],
                 archivedArticles: []
-            }
+            },
+            normalFavoritedArticles: []
         };
     },
 
@@ -60,8 +61,32 @@ var HomePage = React.createClass({
         }
     },
 
+    _favoritesChecked: function() {
+        var filteredTagsWithArticlesByFavorited = _.filter(this.state.pocketData.normalArticles, function(tagWithArticles) {
+            return _.any(tagWithArticles.articles, function(article) {
+                return article.favorite === '1';
+            });
+        }, this);
+
+        var filtered = _.each(filteredTagsWithArticlesByFavorited, function(filteredTagWithArticles) {
+            filteredTagWithArticles.articles = _.filter(filteredTagWithArticles.articles, function(article) {
+                return article.favorite === '1';
+            });
+        });
+
+        console.log(filtered);
+
+        this.setState({ normalFavoritedArticles: filtered });
+    },
+
     render: function() {
-        var normalArticlesToRender = <Articles articles={ this.state.pocketData.normalArticles } />;
+        var normalArticlesToRender = {};
+        if(this.state.normalFavoritedArticles.length > 0) {
+            normalArticlesToRender = <Articles articles={ this.state.normalFavoritedArticles } />;
+        } else {
+            normalArticlesToRender = <Articles articles={ this.state.pocketData.normalArticles } />;
+        }
+
         var archivedArticlesToRender = <Articles articles={ this.state.pocketData.archivedArticles } archived={ true }/>;
         var loadingIndicator = <div className="progress"><div className="indeterminate"></div></div>;
         var connectButton = !window.localStorage.ACCESS_TOKEN ? <div><p>Connect with your pocket app</p><button type="button" onClick={ this._connectWithPocket }>Connect</button></div> : null;
@@ -80,6 +105,14 @@ var HomePage = React.createClass({
                 <div className="container">
                     <h1>Web Mind Map</h1>
                     { connectButton }
+                    <div className="switch">
+                        <label>
+                            Favorites Off
+                            <input type="checkbox" name="favorites" onChange={this._favoritesChecked} />
+                            <span className="lever"></span>
+                            Favorites On
+                        </label>
+                    </div>
                 </div>
                 <div className="col">
                     <ul className="tabs">
