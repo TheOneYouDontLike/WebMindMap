@@ -35,7 +35,8 @@ var HomePage = React.createClass({
             pocketData: {
                 articles: [],
                 tags: []
-            }
+            },
+            showOnlyFavorited: false
         };
     },
 
@@ -61,19 +62,7 @@ var HomePage = React.createClass({
     },
 
     _favoritesChecked: function() {
-        var filteredTagsWithArticlesByFavorited = _.filter(this.state.pocketData.normalArticles, function(tagWithArticles) {
-            return _.any(tagWithArticles.articles, function(article) {
-                return article.favorite === '1';
-            });
-        }, this);
-
-        var filtered = _.each(filteredTagsWithArticlesByFavorited, function(filteredTagWithArticles) {
-            filteredTagWithArticles.articles = _.filter(filteredTagWithArticles.articles, function(article) {
-                return article.favorite === '1';
-            });
-        });
-
-        this.setState({ normalFavoritedArticles: filtered });
+        this.setState({ showOnlyFavorited: !this.state.showOnlyFavorited });
     },
 
     render: function() {
@@ -109,8 +98,8 @@ var HomePage = React.createClass({
             groupedByTags.push(tagWithArticles);
         }, this);
 
-        var unreadArticles = <Articles articles={ groupedByTags } filter={ 'unread' } />;
-        var archivedArticles = <Articles articles={ groupedByTags } filter={ 'archived' } />;
+        var unreadArticles = <Articles articles={ groupedByTags } filter={ 'unread' } showOnlyFavorited={ this.state.showOnlyFavorited } />;
+        var archivedArticles = <Articles articles={ groupedByTags } filter={ 'archived' } showOnlyFavorited={ this.state.showOnlyFavorited } />;
 
         var content = {};
         if(this.state.pocketData.articles.length > 0) {

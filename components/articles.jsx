@@ -71,41 +71,52 @@ var Articles = React.createClass({
                 return;
             }
 
-            var mappedArticles = _.map(articlesToMap, function(article) {
-                var favoriteIcon = {};
+            var mappedArticles = _(articlesToMap)
+                .filter(function(article) {
+                    if (this.props.showOnlyFavorited && !article.favorite) {
+                        return false;
+                    }
+                    return true;
+                }, this)
+                .map(function(article) {
+                    var favoriteIcon = {};
 
-                if(article.favorite === true) {
-                    favoriteIcon = <i className="mdi-action-favorite red-text"></i>;
-                } else {
-                    favoriteIcon = <i className="mdi-action-favorite-outline"></i>;
-                }
+                    if(article.favorite === true) {
+                        favoriteIcon = <i className="mdi-action-favorite red-text"></i>;
+                    } else {
+                        favoriteIcon = <i className="mdi-action-favorite-outline"></i>;
+                    }
 
-                var aTagStyle = {
-                    'whiteSpace': 'normal',
-                    'textTransform': 'none'
-                };
+                    var aTagStyle = {
+                        'whiteSpace': 'normal',
+                        'textTransform': 'none'
+                    };
 
-                var archiveButton = {};
-                if(!this.props.archived) {
-                    archiveButton = <button className="btn-flat" type="button" onClick={ this._archiveArticle.bind(null, article.id) }>
-                                        <i className="mdi-action-done"></i>
-                                    </button>;
-                }
+                    var archiveButton = {};
+                    if(this.props.filter === 'unread') {
+                        archiveButton = <button className="btn-flat" type="button" onClick={ this._archiveArticle.bind(null, article.id) }>
+                                            <i className="mdi-action-done"></i>
+                                        </button>;
+                    }
 
-                return (
-                    <li className="collection-item" key={ article.id }>
-                        <a href={ article.url } style={ aTagStyle } target="_blank">{ article.title }</a>
-                        <hr />
-                        { archiveButton }
-                        <button className="btn-flat" type="button" onClick={ this._deleteArticle.bind(null, article.id) }>
-                            <i className="mdi-action-delete"></i>
-                        </button>
-                        <button className="btn-flat" type="button" onClick={ this._favoriteArticle.bind(null, article.id) }>
-                            { favoriteIcon }
-                        </button>
-                    </li>
-                );
-            }.bind(this));
+                    return (
+                        <li className="collection-item" key={ article.id }>
+                            <a href={ article.url } style={ aTagStyle } target="_blank">{ article.title }</a>
+                            <hr />
+                            { archiveButton }
+                            <button className="btn-flat" type="button" onClick={ this._deleteArticle.bind(null, article.id) }>
+                                <i className="mdi-action-delete"></i>
+                            </button>
+                            <button className="btn-flat" type="button" onClick={ this._favoriteArticle.bind(null, article.id) }>
+                                { favoriteIcon }
+                            </button>
+                        </li>
+                    );
+                }.bind(this)).value();
+
+            if (mappedArticles.length === 0) {
+                return;
+            }
 
             return (
                 <div className="card-wrapper" key={ tagWithArticles.tag }>
