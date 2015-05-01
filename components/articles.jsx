@@ -63,14 +63,20 @@ var Articles = React.createClass({
     },
 
     render: function() {
+        console.log(this.props.articles);
         var articlesToRender = _.map(this.props.articles, function(tagWithArticles) {
-            var mappedArticles = _.map(tagWithArticles.articles, function(article) {
-                var title = article.given_title ? article.given_title : article.given_url;
 
+            var articlesToMap = this.props.filter === 'unread' ? tagWithArticles.unread : tagWithArticles.archived;
+
+            if (articlesToMap.length === 0) {
+                return;
+            }
+
+            var mappedArticles = _.map(articlesToMap, function(article) {
                 var favoriteIcon = {};
 
-                if(article.favorite === '1') {
-                    favoriteIcon = <i className="mdi-action-favorite red-text"k></i>;
+                if(article.favorite === true) {
+                    favoriteIcon = <i className="mdi-action-favorite red-text"></i>;
                 } else {
                     favoriteIcon = <i className="mdi-action-favorite-outline"></i>;
                 }
@@ -82,20 +88,20 @@ var Articles = React.createClass({
 
                 var archiveButton = {};
                 if(!this.props.archived) {
-                    archiveButton = <button className="btn-flat" type="button" onClick={ this._archiveArticle.bind(null, article.item_id) }>
+                    archiveButton = <button className="btn-flat" type="button" onClick={ this._archiveArticle.bind(null, article.id) }>
                                         <i className="mdi-action-done"></i>
                                     </button>;
                 }
 
                 return (
-                    <li className="collection-item" key={ article.item_id }>
-                        <a href={ article.given_url } style={ aTagStyle } target="_blank">{ title }</a>
+                    <li className="collection-item" key={ article.id }>
+                        <a href={ article.url } style={ aTagStyle } target="_blank">{ article.title }</a>
                         <hr />
                         { archiveButton }
-                        <button className="btn-flat" type="button" onClick={ this._deleteArticle.bind(null, article.item_id) }>
+                        <button className="btn-flat" type="button" onClick={ this._deleteArticle.bind(null, article.id) }>
                             <i className="mdi-action-delete"></i>
                         </button>
-                        <button className="btn-flat" type="button" onClick={ this._favoriteArticle.bind(null, article.item_id) }>
+                        <button className="btn-flat" type="button" onClick={ this._favoriteArticle.bind(null, article.id) }>
                             { favoriteIcon }
                         </button>
                     </li>
@@ -103,10 +109,10 @@ var Articles = React.createClass({
             }.bind(this));
 
             return (
-                <div className="card-wrapper" key={ tagWithArticles.tagName }>
+                <div className="card-wrapper" key={ tagWithArticles.tag }>
                     <div className="card">
                         <div className="card-content">
-                            <h2 className="card-title black-text">{ tagWithArticles.tagName }</h2>
+                            <h2 className="card-title black-text">{ tagWithArticles.tag }</h2>
                             <ul className="collection" >
                                 { mappedArticles }
                             </ul>

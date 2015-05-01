@@ -80,25 +80,57 @@ var HomePage = React.createClass({
     },
 
     render: function() {
-        var normalArticlesToRender = {};
-        if(this.state.normalFavoritedArticles.length > 0) {
-            normalArticlesToRender = <Articles articles={ this.state.normalFavoritedArticles } />;
-        } else {
-            normalArticlesToRender = <Articles articles={ this.state.pocketData.normalArticles } />;
-        }
+        // var normalArticlesToRender = {};
+        // if(this.state.normalFavoritedArticles.length > 0) {
+        //     normalArticlesToRender = <Articles articles={ this.state.normalFavoritedArticles } />;
+        // } else {
+        //     normalArticlesToRender = <Articles articles={ this.state.pocketData.normalArticles } />;
+        // }
 
-        var archivedArticlesToRender = <Articles articles={ this.state.pocketData.archivedArticles } archived={ true }/>;
+        // var archivedArticlesToRender = <Articles articles={ this.state.pocketData.archivedArticles } archived={ true }/>;
         var loadingIndicator = <div className="progress"><div className="indeterminate"></div></div>;
         var connectButton = !window.localStorage.ACCESS_TOKEN ? <div><p>Connect with your pocket app</p><button type="button" onClick={ this._connectWithPocket }>Connect</button></div> : null;
 
-        var content = {};
-        if(this.state.pocketData.normalArticles.length > 0) {
-            content.normal = normalArticlesToRender;
-            content.archived = archivedArticlesToRender;
-        } else {
-            content.normal = loadingIndicator;
-            content.archived = loadingIndicator;
-        }
+        // var content = {};
+        // if(this.state.pocketData.normalArticles.length > 0) {
+        //     content.normal = normalArticlesToRender;
+        //     content.archived = archivedArticlesToRender;
+        // } else {
+        //     content.normal = loadingIndicator;
+        //     content.archived = loadingIndicator;
+        // }
+
+        var groupedByTags = [];
+        _.forEach(this.state.pocketData.tags, function(tag) {
+            var tagWithArticles = {
+                tag: tag,
+                unread: [],
+                archived: []
+            };
+
+            _.forEach(this.state.pocketData.articles, function(article) {
+                if(_.contains(article.tags, tag)) {
+                    switch(article.status) {
+                        case 'unread':
+                            tagWithArticles.unread.push(article);
+                            break;
+                        case 'archived':
+                            tagWithArticles.archived.push(article);
+                            break;
+                        default: break;
+                    }
+                }
+            }, this);
+
+            if (tagWithArticles.unread.length === 0 && tagWithArticles.archived.length === 0) {
+                return;
+            }
+
+            groupedByTags.push(tagWithArticles);
+        }, this);
+
+        var unreadArticles = <Articles articles={ groupedByTags } filter={ 'unread' } />;
+        var archivedArticles = <Articles articles={ groupedByTags } filter={ 'archived' } />;
 
         return (
             <div className="HomePage">
@@ -122,10 +154,10 @@ var HomePage = React.createClass({
                 </div>
                 <div className="horizontal-wrapper">
                     <div id="all">
-                        { content.normal }
+                        { unreadArticles }
                     </div>
                     <div id="archived">
-                        { content.archived }
+                        { archivedArticles }
                     </div>
                 </div>
             </div>
