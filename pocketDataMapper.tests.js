@@ -23,10 +23,12 @@ describe('pocketDataMapper', function() {
 
     it('should map pure pocket data to form used by application', function() {
         // when
-        var articles = pocketDataMapper.mapFromApi(parsedFile).articles;
+        var articles = pocketDataMapper.mapFromApi(parsedFile);
+        console.log(articles);
 
         // then
-        var expected =
+        var expectedTagName = 'dev';
+        var expectedFirstItem =
         {
             id: 4868,
             url: 'http://www.ergotron.com/tabid/305/language/en-US/default.aspx',
@@ -37,12 +39,15 @@ describe('pocketDataMapper', function() {
             tags: ['development', 'dev']
         };
 
-        assert.that(articles[0]).is.equalTo(expected);
+        assert.that(articles[1].unread[0]).is.equalTo(expectedFirstItem);
+        assert.that(articles[1].tag).is.equalTo(expectedTagName);
     });
 
     it('should return all possible tags', function() {
         // when
-        var tags = pocketDataMapper.mapFromApi(parsedFile).tags;
+        var tags = pocketDataMapper.mapFromApi(parsedFile).map(function(tagWithArticles) {
+            return tagWithArticles.tag;
+        });
 
         // then
         var expected = ['_no_tags_', 'dev', 'development'];

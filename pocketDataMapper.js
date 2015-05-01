@@ -14,12 +14,48 @@ var PocketDataMapper = function() {
     function mapFromApi(pocketData) {
         var articles = pocketData.list;
 
-        var mappedArticles = _.map(articles, function(article) {
+        var mappedArticles = _mapArticles(articles);
+        var mappedTags = _mapTags(pocketData.list);
+
+        var groupedByTags = [];
+        _.forEach(mappedTags, function(tag) {
+            var tagWithArticles = {
+                tag: tag,
+                unread: [],
+                archived: []
+            };
+
+            _.forEach(mappedArticles, function(article) {
+                if(_.contains(article.tags, tag)) {
+                    switch(article.status) {
+                        case 'unread':
+                            tagWithArticles.unread.push(article);
+                            break;
+                        case 'archived':
+                            tagWithArticles.archived.push(article);
+                            break;
+                        default: break;
+                    }
+                }
+            });
+
+            if (tagWithArticles.unread.length === 0 && tagWithArticles.archived.length === 0) {
+                return;
+            }
+
+            groupedByTags.push(tagWithArticles);
+        });
+
+        return groupedByTags;
+    }
+
+    function _mapArticles(articles) {
+        return _.map(articles, function(article) {
             var mapped = {
                 id: parseInt(article.item_id),
                 url: article.resolved_url,
                 title: article.given_title,
-                favorite: article.favorite === "1" ? true : false,
+                favorite: article.favorite === '1' ? true : false,
                 status: _extractStatus(article.status),
                 excerpt: article.excerpt,
                 tags: _extractTags(article.tags)
@@ -27,13 +63,6 @@ var PocketDataMapper = function() {
 
             return mapped;
         });
-
-        var mappedTags = _getTags(pocketData.list);
-
-        return {
-            articles: mappedArticles,
-            tags: mappedTags
-        };
     }
 
     function _extractStatus(status) {
@@ -47,7 +76,17 @@ var PocketDataMapper = function() {
         }
     }
 
-    function _getTags(listOfArticles) {
+    function _extractTags(tags) {
+        if (!tags) {
+            return NO_TAGS_ARRAY;
+        }
+
+        return _.map(tags, function(tagObject) {
+            return tagObject.tag;
+        });
+    }
+
+    function _mapTags(listOfArticles) {
         var allTags =
             _(listOfArticles)
             .map(function(article) {
@@ -64,15 +103,6 @@ var PocketDataMapper = function() {
         return allTags;
     }
 
-    function _extractTags(tags) {
-        if (!tags) {
-            return NO_TAGS_ARRAY;
-        }
-
-        return _.map(tags, function(tagObject) {
-            return tagObject.tag;
-        });
-    }
 };
 
 module.exports = PocketDataMapper;

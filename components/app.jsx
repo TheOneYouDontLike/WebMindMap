@@ -32,10 +32,7 @@ var HomePage = React.createClass({
 
     getInitialState: function() {
         return {
-            pocketData: {
-                articles: [],
-                tags: []
-            },
+            pocketData: [],
             showOnlyFavorited: false
         };
     },
@@ -69,40 +66,11 @@ var HomePage = React.createClass({
         var loadingIndicator = <div className="progress"><div className="indeterminate"></div></div>;
         var connectButton = !window.localStorage.ACCESS_TOKEN ? <button type="button" className="btn connect-button" onClick={ this._connectWithPocket }>Connect with your pocket account</button> : null;
 
-        var groupedByTags = [];
-        _.forEach(this.state.pocketData.tags, function(tag) {
-            var tagWithArticles = {
-                tag: tag,
-                unread: [],
-                archived: []
-            };
-
-            _.forEach(this.state.pocketData.articles, function(article) {
-                if(_.contains(article.tags, tag)) {
-                    switch(article.status) {
-                        case 'unread':
-                            tagWithArticles.unread.push(article);
-                            break;
-                        case 'archived':
-                            tagWithArticles.archived.push(article);
-                            break;
-                        default: break;
-                    }
-                }
-            }, this);
-
-            if (tagWithArticles.unread.length === 0 && tagWithArticles.archived.length === 0) {
-                return;
-            }
-
-            groupedByTags.push(tagWithArticles);
-        }, this);
-
-        var unreadArticles = <Articles articles={ groupedByTags } filter={ 'unread' } showOnlyFavorited={ this.state.showOnlyFavorited } />;
-        var archivedArticles = <Articles articles={ groupedByTags } filter={ 'archived' } showOnlyFavorited={ this.state.showOnlyFavorited } />;
+        var unreadArticles = <Articles articles={ this.state.pocketData } filter={ 'unread' } showOnlyFavorited={ this.state.showOnlyFavorited } />;
+        var archivedArticles = <Articles articles={ this.state.pocketData } filter={ 'archived' } showOnlyFavorited={ this.state.showOnlyFavorited } />;
 
         var content = {};
-        if(this.state.pocketData.articles.length > 0) {
+        if(this.state.pocketData.length > 0) {
             content.unreadArticles = unreadArticles;
             content.archivedArticles = archivedArticles;
         } else {
