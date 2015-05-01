@@ -100,7 +100,7 @@ var PocketDataMapper = function() {
             var articlesGroupedByTag =
                 _(articles)
                 .filter(function(article) {
-                    var tagsArray = _extractTags(article);
+                    var tagsArray = _extractTags(article.tags);
 
                     return _.contains(tagsArray, tag);
                 })
