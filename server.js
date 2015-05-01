@@ -7,7 +7,7 @@ var express              = require('express'),
     pocketApiConsumerKey = require('./consumerKey.js');
 
 var dataSource = {
-    dataSource: 'temp.json'
+    //dataSource: 'temp.json'
     //saveToFile: true
 };
 
@@ -35,7 +35,6 @@ app.get('/getAccessToken/:requestToken', function(req, res) {
 
 app.get('/getArticles/:accessToken', function(req, res) {
     pocketApi.getAll(req.params.accessToken, function(error, data) {
-        //var articlesGroupedByTags = pocketDataMapper.groupByTags(data);
         var allData = pocketDataMapper.mapFromApi(data);
 
         res.send(allData);

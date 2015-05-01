@@ -33,10 +33,9 @@ var HomePage = React.createClass({
     getInitialState: function() {
         return {
             pocketData: {
-                normalArticles: [],
-                archivedArticles: []
-            },
-            normalFavoritedArticles: []
+                articles: [],
+                tags: []
+            }
         };
     },
 
@@ -74,31 +73,12 @@ var HomePage = React.createClass({
             });
         });
 
-        console.log(filtered);
-
         this.setState({ normalFavoritedArticles: filtered });
     },
 
     render: function() {
-        // var normalArticlesToRender = {};
-        // if(this.state.normalFavoritedArticles.length > 0) {
-        //     normalArticlesToRender = <Articles articles={ this.state.normalFavoritedArticles } />;
-        // } else {
-        //     normalArticlesToRender = <Articles articles={ this.state.pocketData.normalArticles } />;
-        // }
-
-        // var archivedArticlesToRender = <Articles articles={ this.state.pocketData.archivedArticles } archived={ true }/>;
         var loadingIndicator = <div className="progress"><div className="indeterminate"></div></div>;
-        var connectButton = !window.localStorage.ACCESS_TOKEN ? <div><p>Connect with your pocket app</p><button type="button" onClick={ this._connectWithPocket }>Connect</button></div> : null;
-
-        // var content = {};
-        // if(this.state.pocketData.normalArticles.length > 0) {
-        //     content.normal = normalArticlesToRender;
-        //     content.archived = archivedArticlesToRender;
-        // } else {
-        //     content.normal = loadingIndicator;
-        //     content.archived = loadingIndicator;
-        // }
+        var connectButton = !window.localStorage.ACCESS_TOKEN ? <button type="button" className="btn connect-button" onClick={ this._connectWithPocket }>Connect with your pocket account</button> : null;
 
         var groupedByTags = [];
         _.forEach(this.state.pocketData.tags, function(tag) {
@@ -132,10 +112,19 @@ var HomePage = React.createClass({
         var unreadArticles = <Articles articles={ groupedByTags } filter={ 'unread' } />;
         var archivedArticles = <Articles articles={ groupedByTags } filter={ 'archived' } />;
 
+        var content = {};
+        if(this.state.pocketData.articles.length > 0) {
+            content.unreadArticles = unreadArticles;
+            content.archivedArticles = archivedArticles;
+        } else {
+            content.unreadArticles = loadingIndicator;
+            content.archivedArticles = loadingIndicator;
+        }
+
         return (
             <div className="HomePage">
                 <div className="container">
-                    <h1>Web Mind Map</h1>
+                    <p className="app-name"><b>Pocket Mind Map</b></p>
                     { connectButton }
                     <div className="switch">
                         <label>
@@ -154,10 +143,10 @@ var HomePage = React.createClass({
                 </div>
                 <div className="horizontal-wrapper">
                     <div id="all">
-                        { unreadArticles }
+                        { content.unreadArticles }
                     </div>
                     <div id="archived">
-                        { archivedArticles }
+                        { content.archivedArticles }
                     </div>
                 </div>
             </div>

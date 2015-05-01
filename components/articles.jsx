@@ -63,7 +63,6 @@ var Articles = React.createClass({
     },
 
     render: function() {
-        console.log(this.props.articles);
         var articlesToRender = _.map(this.props.articles, function(tagWithArticles) {
 
             var articlesToMap = this.props.filter === 'unread' ? tagWithArticles.unread : tagWithArticles.archived;
