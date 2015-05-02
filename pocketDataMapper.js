@@ -54,7 +54,7 @@ var PocketDataMapper = function() {
             var mapped = {
                 id: parseInt(article.item_id),
                 url: article.resolved_url,
-                title: article.given_title,
+                title: _extractTitle(article),
                 favorite: article.favorite === '1' ? true : false,
                 status: _extractStatus(article.status),
                 excerpt: article.excerpt,
@@ -63,6 +63,18 @@ var PocketDataMapper = function() {
 
             return mapped;
         });
+    }
+
+    function _extractTitle (article) {
+        if (article.given_title) {
+            return article.given_title;
+        } else if (article.resolved_title) {
+            return article.resolved_title;
+        } else if (article.given_url) {
+            return article.given_url;
+        }
+
+        return article.resolved.url;
     }
 
     function _extractStatus(status) {
