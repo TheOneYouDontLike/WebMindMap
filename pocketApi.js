@@ -104,9 +104,9 @@ var pocketApi = function(pocketApiConsumerKey, options) {
         var actionsToPerform = [action];
 
         var requestBody = JSON.stringify({
-            "consumer_key": pocketApiConstants.consumerKey,
-            "access_token": accessToken,
-            "actions": actionsToPerform
+            'consumer_key': pocketApiConstants.consumerKey,
+            'access_token': accessToken,
+            'actions': actionsToPerform
         });
 
         superagent

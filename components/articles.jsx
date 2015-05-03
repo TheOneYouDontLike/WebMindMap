@@ -11,10 +11,11 @@ var Articles = React.createClass({
         };
     },
 
-    _archiveArticle: function(articleId) {
+    _archiveArticle: function(articleId, currentStatus) {
         var archiveRequestBody = {
             accessToken: window.localStorage.ACCESS_TOKEN,
-            articleId: articleId
+            articleId: articleId,
+            currentStatus: currentStatus
         };
 
         superagent
@@ -92,18 +93,18 @@ var Articles = React.createClass({
                         'textTransform': 'none'
                     };
 
-                    var archiveButton = {};
-                    if(this.props.filter === 'unread') {
-                        archiveButton = <button className="btn-flat" type="button" onClick={ this._archiveArticle.bind(null, article.id) }>
-                                            <i className="mdi-action-done"></i>
-                                        </button>;
+                    var archiveButtonIcon = 'mdi-action-done';
+                    if (article.status === 'archived') {
+                        archiveButtonIcon = 'mdi-navigation-refresh';
                     }
 
                     return (
                         <li className="collection-item" key={ article.id }>
                             <a href={ article.url } style={ aTagStyle } target="_blank">{ article.title }</a>
                             <hr />
-                            { archiveButton }
+                            <button className="btn-flat" type="button" onClick={ this._archiveArticle.bind(null, article.id, article.status) }>
+                                <i className={ archiveButtonIcon }></i>
+                            </button>
                             <button className="btn-flat" type="button" onClick={ this._deleteArticle.bind(null, article.id) }>
                                 <i className="mdi-action-delete"></i>
                             </button>

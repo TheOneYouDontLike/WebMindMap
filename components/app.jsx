@@ -86,7 +86,7 @@ var HomePage = React.createClass({
                     <div className="switch">
                         <label>
                             Favorites Off
-                            <input type="checkbox" name="favorites" onChange={this._favoritesChecked} />
+                            <input type="checkbox" name="favorites" onChange={ this._favoritesChecked } />
                             <span className="lever"></span>
                             Favorites On
                         </label>
