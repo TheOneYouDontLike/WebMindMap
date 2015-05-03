@@ -1,8 +1,9 @@
 'use strict';
 
-var React      = require('react'),
-    _          = require('lodash'),
-    superagent = require('superagent');
+var React          = require('react'),
+    _              = require('lodash'),
+    superagent     = require('superagent'),
+    ARTICLE_STATUS = require('../helpers/articleStatusConstants.js');
 
 var Articles = React.createClass({
     getDefaultProps: function() {
@@ -94,7 +95,7 @@ var Articles = React.createClass({
                     };
 
                     var archiveButtonIcon = 'mdi-action-done';
-                    if (article.status === 'archived') {
+                    if (article.status === ARTICLE_STATUS.ARCHIVED) {
                         archiveButtonIcon = 'mdi-navigation-refresh';
                     }
 

@@ -1,6 +1,7 @@
 'use strict';
 
-var _ = require('lodash');
+var _              = require('lodash'),
+    ARTICLE_STATUS = require('./helpers/articleStatusConstants.js');
 
 var NO_TAGS_ARRAY = ['_no_tags_'];
 
@@ -28,10 +29,10 @@ var PocketDataMapper = function() {
             _.forEach(mappedArticles, function(article) {
                 if(_.contains(article.tags, tag)) {
                     switch(article.status) {
-                        case 'unread':
+                        case ARTICLE_STATUS.UNREAD:
                             tagWithArticles.unread.push(article);
                             break;
-                        case 'archived':
+                        case ARTICLE_STATUS.ARCHIVED:
                             tagWithArticles.archived.push(article);
                             break;
                         default: break;
@@ -80,11 +81,11 @@ var PocketDataMapper = function() {
     function _extractStatus(status) {
         switch (status) {
             case '0':
-                return 'unread';
+                return ARTICLE_STATUS.UNREAD;
             case '1':
-                return 'archived';
+                return ARTICLE_STATUS.ARCHIVED;
             case '2':
-                return 'deleted';
+                return ARTICLE_STATUS.DELETED;
         }
     }
 

@@ -4,12 +4,8 @@ var express              = require('express'),
     bodyParser           = require('body-parser'),
     PocketApi            = require('./pocketApi.js'),
     PocketDataMapper     = require('./pocketDataMapper.js'),
-    pocketApiConsumerKey = require('./consumerKey.js');
-
-var ARTICLE_STATUS = {
-    ARCHIVED: 'archived',
-    UNREAD: 'unread'
-};
+    pocketApiConsumerKey = require('./consumerKey.js'),
+    ARTICLE_STATUS       = require('./helpers/articleStatusConstants.js');
 
 var dataSource = {
     //dataSource: 'temp.json'
@@ -62,7 +58,7 @@ app.post('/archiveArticle', function(req, res) {
 
     pocketApi.performAction(action, req.body.accessToken, function(error, data) {
         if (error) { console.log('logging error: '); console.log(error); res.send(error.message); }
-        res.send('Archived!');
+        res.send('Done!');
     });
 });
 
