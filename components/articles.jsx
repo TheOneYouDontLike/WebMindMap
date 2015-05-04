@@ -25,8 +25,9 @@ var Articles = React.createClass({
             .end(function(error, response) {
                 if(error) { alert(error); return; }
 
-                alert(response.text);
-                window.location.reload(); //TODO: for now
+                toast(response.text, 1000, '', function() {
+                    window.location.reload(); //TODO: for now
+                });
             });
     },
 
@@ -42,15 +43,17 @@ var Articles = React.createClass({
             .end(function(error, response) {
                 if(error) { alert(error); return; }
 
-                alert(response.text);
-                window.location.reload(); //TODO: for now
+                toast(response.text, 1000, '', function() {
+                    window.location.reload(); //TODO: for now
+                });
             });
     },
 
-    _favoriteArticle: function(articleId) {
+    _favoriteArticle: function(articleId, alreadyFavorite) {
         var favoriteRequestBody = {
             accessToken: window.localStorage.ACCESS_TOKEN,
-            articleId: articleId
+            articleId: articleId,
+            alreadyFavorite: alreadyFavorite
         };
 
         superagent
@@ -59,14 +62,15 @@ var Articles = React.createClass({
             .end(function(error, response) {
                 if(error) { alert(error); return; }
 
-                alert(response.text);
-                window.location.reload(); //TODO: for now
+                toast(response.text, 1000, '', function() {
+                    window.location.reload(); //TODO: for now
+                });
             });
     },
 
 
     componentDidMount: function() {
-        _initializeTooltip();
+        this._initializeTooltip();
     },
 
     _initializeTooltip: function() {
@@ -118,7 +122,7 @@ var Articles = React.createClass({
                             <button className="btn-flat tooltipped" type="button" onClick={ this._deleteArticle.bind(null, article.id) } data-delay="50" data-tooltip="Delete" data-position="top">
                                 <i className="mdi-action-delete"></i>
                             </button>
-                            <button className="btn-flat tooltipped" type="button" onClick={ this._favoriteArticle.bind(null, article.id) } data-delay="50" data-tooltip="Favorite/Unfavorite" data-position="top">
+                            <button className="btn-flat tooltipped" type="button" onClick={ this._favoriteArticle.bind(null, article.id, article.favorite) } data-delay="50" data-tooltip="Favorite/Unfavorite" data-position="top">
                                 { favoriteIcon }
                             </button>
                         </li>

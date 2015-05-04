@@ -43,17 +43,14 @@ app.get('/getArticles/:accessToken', function(req, res) {
 });
 
 app.post('/archiveArticle', function(req, res) {
-    var action = {};
+    var action = {
+        item_id : req.body.articleId
+    };
+
     if (req.body.currentStatus === ARTICLE_STATUS.ARCHIVED) {
-        action = {
-            action : 'readd',
-            item_id : req.body.articleId,
-        };
+        action.action = 'readd';
     } else {
-        action = {
-            action : 'archive',
-            item_id : req.body.articleId,
-        };
+        action.action = 'archive';
     }
 
     pocketApi.performAction(action, req.body.accessToken, function(error, data) {
@@ -65,7 +62,7 @@ app.post('/archiveArticle', function(req, res) {
 app.post('/deleteArticle', function(req, res) {
     var action = {
         action : 'delete',
-        item_id : req.body.articleId,
+        item_id : req.body.articleId
     };
 
     pocketApi.performAction(action, req.body.accessToken, function(error, data) {
@@ -76,13 +73,18 @@ app.post('/deleteArticle', function(req, res) {
 
 app.post('/favoriteArticle', function(req, res) {
     var action = {
-        action : 'favorite',
-        item_id : req.body.articleId,
+        item_id : req.body.articleId
     };
+
+    if (req.body.alreadyFavorite) {
+        action.action = 'unfavorite';
+    } else {
+        action.action = 'favorite';
+    }
 
     pocketApi.performAction(action, req.body.accessToken, function(error, data) {
         if (error) { console.log('logging error: '); console.log(error); res.send(error.message); }
-        res.send('Favorited!');
+        res.send('Done!');
     });
 });
 
