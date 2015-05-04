@@ -26,7 +26,7 @@ var pocketApi = function(pocketApiConsumerKey, options) {
     function getRequestToken(callback) {
         var requestBody = JSON.stringify({
             'consumer_key': pocketApiConstants.consumerKey,
-            'redirect_uri': "http://localhost:1234"
+            'redirect_uri': 'http://localhost:1234'
         });
 
         superagent
@@ -45,8 +45,8 @@ var pocketApi = function(pocketApiConsumerKey, options) {
 
     function getAccessToken(requestToken, callback) {
         var requestBody = JSON.stringify({
-            "consumer_key": pocketApiConstants.consumerKey,
-            "code": requestToken
+            'consumer_key': pocketApiConstants.consumerKey,
+            'code': requestToken
         });
 
         superagent
@@ -76,10 +76,11 @@ var pocketApi = function(pocketApiConsumerKey, options) {
         }
 
         var requestBody = JSON.stringify({
-            "consumer_key": pocketApiConstants.consumerKey,
-            "access_token": accessToken,
-            "detailType": "complete",
-            "state": "all"
+            'consumer_key': pocketApiConstants.consumerKey,
+            'access_token': accessToken,
+            'detailType': 'complete',
+            'state': 'all',
+            'sort': 'newest'
         });
 
         superagent

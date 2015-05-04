@@ -51,7 +51,8 @@ var PocketDataMapper = function() {
     }
 
     function _mapArticles(articles) {
-        return _.map(articles, function(article) {
+        return _(articles)
+        .map(function(article) {
             var mapped = {
                 id: parseInt(article.item_id),
                 url: article.resolved_url,
@@ -63,7 +64,9 @@ var PocketDataMapper = function() {
             };
 
             return mapped;
-        });
+        })
+        .value()
+        .reverse();
     }
 
     function _extractTitle (article) {

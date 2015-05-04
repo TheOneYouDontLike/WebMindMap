@@ -62,12 +62,41 @@ var HomePage = React.createClass({
         this.setState({ showOnlyFavorited: !this.state.showOnlyFavorited });
     },
 
+    _handleArticleDelete: function(articleId, articleTags) {
+        var pocketData = this.state.pocketData;
+
+        _.forEach(articleTags, function(tag){
+            _.forEach(pocketData, function(tagWithArticles) {
+                if (tagWithArticles.tag === tag) {
+                    _.remove(tagWithArticles.unread, function(article) {
+                        return article.id === articleId;
+                    });
+
+                    _.remove(tagWithArticles.archived, function(article) {
+                        return article.id === articleId;
+                    });
+                }
+            });
+        });
+
+        this.setState({pocketData: pocketData});
+    },
+
     render: function() {
         var loadingIndicator = <div className="progress"><div className="indeterminate"></div></div>;
         var connectButton = !window.localStorage.ACCESS_TOKEN ? <button type="button" className="btn connect-button" onClick={ this._connectWithPocket }>Connect with your pocket account</button> : null;
 
-        var unreadArticles = <Articles articles={ this.state.pocketData } filter={ 'unread' } showOnlyFavorited={ this.state.showOnlyFavorited } />;
-        var archivedArticles = <Articles articles={ this.state.pocketData } filter={ 'archived' } showOnlyFavorited={ this.state.showOnlyFavorited } />;
+        var unreadArticles = <Articles
+                                articles={ this.state.pocketData }
+                                filter={ 'unread' }
+                                showOnlyFavorited={ this.state.showOnlyFavorited }
+                                handleArticleDelete={ this._handleArticleDelete } />;
+
+        var archivedArticles = <Articles
+                                    articles={ this.state.pocketData }
+                                    filter={ 'archived' }
+                                    showOnlyFavorited={ this.state.showOnlyFavorited }
+                                    handleArticleDelete={ this._handleArticleDelete } />;
 
         var content = {};
         if(this.state.pocketData.length > 0) {

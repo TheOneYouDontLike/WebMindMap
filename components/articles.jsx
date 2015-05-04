@@ -1,4 +1,5 @@
 'use strict';
+/* globals toast */
 
 var React          = require('react'),
     _              = require('lodash'),
@@ -31,7 +32,7 @@ var Articles = React.createClass({
             });
     },
 
-    _deleteArticle: function(articleId) {
+    _deleteArticle: function(articleId, articleTags) {
         var deleteRequestBody = {
             accessToken: window.localStorage.ACCESS_TOKEN,
             articleId: articleId
@@ -44,9 +45,9 @@ var Articles = React.createClass({
                 if(error) { alert(error); return; }
 
                 toast(response.text, 1000, '', function() {
-                    window.location.reload(); //TODO: for now
-                });
-            });
+                    this.props.handleArticleDelete(articleId, articleTags);
+                }.bind(this));
+            }.bind(this));
     },
 
     _favoriteArticle: function(articleId, alreadyFavorite) {
@@ -67,7 +68,6 @@ var Articles = React.createClass({
                 });
             });
     },
-
 
     componentDidMount: function() {
         this._initializeTooltip();
@@ -119,7 +119,7 @@ var Articles = React.createClass({
                             <button className="btn-flat tooltipped" type="button" onClick={ this._archiveArticle.bind(null, article.id, article.status) } data-delay="50" data-tooltip="Archive/Unarchive" data-position="top">
                                 <i className={ archiveButtonIcon }></i>
                             </button>
-                            <button className="btn-flat tooltipped" type="button" onClick={ this._deleteArticle.bind(null, article.id) } data-delay="50" data-tooltip="Delete" data-position="top">
+                            <button className="btn-flat tooltipped" type="button" onClick={ this._deleteArticle.bind(null, article.id, article.tags) } data-delay="50" data-tooltip="Delete" data-position="top">
                                 <i className="mdi-action-delete"></i>
                             </button>
                             <button className="btn-flat tooltipped" type="button" onClick={ this._favoriteArticle.bind(null, article.id, article.favorite) } data-delay="50" data-tooltip="Favorite/Unfavorite" data-position="top">
