@@ -1,7 +1,7 @@
 'use strict';
 
 var _              = require('lodash'),
-    ARTICLE_STATUS = require('./helpers/articleStatusConstants.js');
+    ARTICLE_STATUS = require('./helpers/articleStatusTypes.js');
 
 var NO_TAGS_ARRAY = ['_no_tags_'];
 

@@ -3,7 +3,7 @@
 var React          = require('react'),
     _              = require('lodash'),
     superagent     = require('superagent'),
-    ARTICLE_STATUS = require('../helpers/articleStatusConstants.js');
+    ARTICLE_STATUS = require('../helpers/articleStatusTypes.js');
 
 var Articles = React.createClass({
     getDefaultProps: function() {

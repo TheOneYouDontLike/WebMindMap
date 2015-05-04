@@ -5,7 +5,7 @@ var express              = require('express'),
     PocketApi            = require('./pocketApi.js'),
     PocketDataMapper     = require('./pocketDataMapper.js'),
     pocketApiConsumerKey = require('./consumerKey.js'),
-    ARTICLE_STATUS       = require('./helpers/articleStatusConstants.js');
+    ARTICLE_STATUS       = require('./helpers/articleStatusTypes.js');
 
 var dataSource = {
     //dataSource: 'temp.json'
