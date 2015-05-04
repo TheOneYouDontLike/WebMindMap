@@ -64,6 +64,15 @@ var Articles = React.createClass({
             });
     },
 
+
+    componentDidMount: function() {
+        _initializeTooltip();
+    },
+
+    _initializeTooltip: function() {
+        $('.tooltipped').tooltip({delay: 50});
+    },
+
     render: function() {
         var articlesToRender = _.map(this.props.articles, function(tagWithArticles) {
 
@@ -103,13 +112,13 @@ var Articles = React.createClass({
                         <li className="collection-item" key={ article.id }>
                             <a href={ article.url } style={ aTagStyle } target="_blank">{ article.title }</a>
                             <hr />
-                            <button className="btn-flat" type="button" onClick={ this._archiveArticle.bind(null, article.id, article.status) }>
+                            <button className="btn-flat tooltipped" type="button" onClick={ this._archiveArticle.bind(null, article.id, article.status) } data-delay="50" data-tooltip="Archive/Unarchive" data-position="top">
                                 <i className={ archiveButtonIcon }></i>
                             </button>
-                            <button className="btn-flat" type="button" onClick={ this._deleteArticle.bind(null, article.id) }>
+                            <button className="btn-flat tooltipped" type="button" onClick={ this._deleteArticle.bind(null, article.id) } data-delay="50" data-tooltip="Delete" data-position="top">
                                 <i className="mdi-action-delete"></i>
                             </button>
-                            <button className="btn-flat" type="button" onClick={ this._favoriteArticle.bind(null, article.id) }>
+                            <button className="btn-flat tooltipped" type="button" onClick={ this._favoriteArticle.bind(null, article.id) } data-delay="50" data-tooltip="Favorite/Unfavorite" data-position="top">
                                 { favoriteIcon }
                             </button>
                         </li>
