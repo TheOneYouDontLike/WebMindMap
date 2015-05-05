@@ -13,7 +13,7 @@ var Articles = React.createClass({
         };
     },
 
-    _archiveArticle: function(articleId, currentStatus) {
+    _archiveArticle: function(articleId, articleTags, currentStatus) {
         var archiveRequestBody = {
             accessToken: window.localStorage.ACCESS_TOKEN,
             articleId: articleId,
@@ -27,9 +27,9 @@ var Articles = React.createClass({
                 if(error) { alert(error); return; }
 
                 toast(response.text, 1000, '', function() {
-                    window.location.reload(); //TODO: for now
-                });
-            });
+                    this.props.handleArticleArchiving(articleId, articleTags);
+                }.bind(this));
+            }.bind(this));
     },
 
     _deleteArticle: function(articleId, articleTags) {
@@ -116,7 +116,7 @@ var Articles = React.createClass({
                         <li className="collection-item" key={ article.id }>
                             <a href={ article.url } style={ aTagStyle } target="_blank">{ article.title }</a>
                             <hr />
-                            <button className="btn-flat tooltipped" type="button" onClick={ this._archiveArticle.bind(null, article.id, article.status) } data-delay="50" data-tooltip="Archive/Unarchive" data-position="top">
+                            <button className="btn-flat tooltipped" type="button" onClick={ this._archiveArticle.bind(null, article.id, article.tags, article.status) } data-delay="50" data-tooltip="Archive/Unarchive" data-position="top">
                                 <i className={ archiveButtonIcon }></i>
                             </button>
                             <button className="btn-flat tooltipped" type="button" onClick={ this._deleteArticle.bind(null, article.id, article.tags) } data-delay="50" data-tooltip="Delete" data-position="top">

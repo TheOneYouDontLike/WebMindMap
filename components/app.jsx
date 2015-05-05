@@ -3,7 +3,8 @@
 var React = require('react'),
     superagent = require('superagent'),
     _ = require('lodash'),
-    Articles = require('./articles.jsx');
+    Articles = require('./articles.jsx'),
+    ARTICLE_STATUS = require('../helpers/articleStatusTypes.js');
 
 var mainContainer = document.getElementById('main-container');
 
@@ -82,6 +83,46 @@ var HomePage = React.createClass({
         this.setState({pocketData: pocketData});
     },
 
+    _handleArticleArchiving: function(articleId, articleTags) {
+        var pocketData = this.state.pocketData;
+
+        _.forEach(articleTags, function(tag){
+            _.forEach(pocketData, function(tagWithArticles) {
+                if (tagWithArticles.tag === tag) {
+                    var unreadArticle = _.find(tagWithArticles.unread, function(article) {
+                        return article.id === articleId;
+                    });
+
+                    if (unreadArticle) {
+                        tagWithArticles.unread = _.reject(tagWithArticles.unread, function(article) {
+                            return article.id === articleId;
+                        });
+
+                        unreadArticle.status = ARTICLE_STATUS.ARCHIVED;
+                        tagWithArticles.archived.push(unreadArticle);
+
+                        return;
+                    }
+
+                    var archivedArticle = _.find(tagWithArticles.archived, function(article) {
+                        return article.id === articleId;
+                    });
+
+                    if (archivedArticle) {
+                        tagWithArticles.archived = _.reject(tagWithArticles.archived, function(article) {
+                            return article.id === articleId;
+                        });
+
+                        archivedArticle.status = ARTICLE_STATUS.UNREAD;
+                        tagWithArticles.unread.push(archivedArticle);
+                    }
+                }
+            });
+        });
+
+        this.setState({pocketData: pocketData});
+    },
+
     render: function() {
         var loadingIndicator = <div className="progress"><div className="indeterminate"></div></div>;
         var connectButton = !window.localStorage.ACCESS_TOKEN ? <button type="button" className="btn connect-button" onClick={ this._connectWithPocket }>Connect with your pocket account</button> : null;
@@ -90,13 +131,15 @@ var HomePage = React.createClass({
                                 articles={ this.state.pocketData }
                                 filter={ 'unread' }
                                 showOnlyFavorited={ this.state.showOnlyFavorited }
-                                handleArticleDelete={ this._handleArticleDelete } />;
+                                handleArticleDelete={ this._handleArticleDelete }
+                                handleArticleArchiving={ this._handleArticleArchiving } />;
 
         var archivedArticles = <Articles
                                     articles={ this.state.pocketData }
                                     filter={ 'archived' }
                                     showOnlyFavorited={ this.state.showOnlyFavorited }
-                                    handleArticleDelete={ this._handleArticleDelete } />;
+                                    handleArticleDelete={ this._handleArticleDelete }
+                                    handleArticleArchiving={ this._handleArticleArchiving } />;
 
         var content = {};
         if(this.state.pocketData.length > 0) {
