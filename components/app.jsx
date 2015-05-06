@@ -4,7 +4,7 @@ var React = require('react'),
     superagent = require('superagent'),
     _ = require('lodash'),
     Articles = require('./articles.jsx'),
-    pocketDataService = require('../helpers/pocketDataService.js');
+    _pocketDataService = require('../helpers/pocketDataService.js');
 
 var mainContainer = document.getElementById('main-container');
 
@@ -86,7 +86,7 @@ var HomePage = React.createClass({
     _handleArticleArchiving: function(articleId, articleTags) {
         var pocketData = this.state.pocketData;
 
-        pocketDataService.updatePocketDataAfterArchiving(pocketData, articleId, articleTags);
+        _pocketDataService.updatePocketDataAfterArchiving(pocketData, articleId, articleTags);
 
         this.setState({pocketData: pocketData});
     },

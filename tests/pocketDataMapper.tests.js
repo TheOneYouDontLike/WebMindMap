@@ -1,8 +1,7 @@
 'use strict';
-var _ = require('lodash'),
-    fs = require('fs'),
+var fs = require('fs'),
     assert = require('assertthat'),
-    PocketDataMapper = require('./pocketDataMapper.js');
+    PocketDataMapper = require('../pocketDataMapper.js');
 
 var pocketDataMapper = new PocketDataMapper();
 
