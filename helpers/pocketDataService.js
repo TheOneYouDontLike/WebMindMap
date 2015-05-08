@@ -8,14 +8,10 @@ var dataMutator = {
         _.forEach(articleTags, function(tag){
             _.forEach(pocketData, function(tagWithArticles) {
                 if (tagWithArticles.tag === tag) {
-                    var unreadArticle = _.find(tagWithArticles.unread, function(article) {
-                        return article.id === articleId;
-                    });
+                    var unreadArticle = _findArticleIn(tagWithArticles.unread, articleId);
 
                     if (unreadArticle) {
-                        tagWithArticles.unread = _.reject(tagWithArticles.unread, function(article) {
-                            return article.id === articleId;
-                        });
+                        _removeArticleFrom(tagWithArticles.unread, articleId);
 
                         unreadArticle.status = ARTICLE_STATUS.ARCHIVED;
                         tagWithArticles.archived.push(unreadArticle);
@@ -23,14 +19,10 @@ var dataMutator = {
                         return;
                     }
 
-                    var archivedArticle = _.find(tagWithArticles.archived, function(article) {
-                        return article.id === articleId;
-                    });
+                    var archivedArticle = _findArticleIn(tagWithArticles.archived, articleId);
 
                     if (archivedArticle) {
-                        tagWithArticles.archived = _.reject(tagWithArticles.archived, function(article) {
-                            return article.id === articleId;
-                        });
+                        _removeArticleFrom(tagWithArticles.archived, articleId);
 
                         archivedArticle.status = ARTICLE_STATUS.UNREAD;
                         tagWithArticles.unread.push(archivedArticle);
@@ -41,5 +33,16 @@ var dataMutator = {
     }
 };
 
+function _findArticleIn(articlesCollection, articleId) {
+    return _.find(articlesCollection, function(article) {
+        return article.id === articleId;
+    });
+}
+
+function _removeArticleFrom(articlesCollection, articleId) {
+    _.remove(articlesCollection, function(article) {
+        return article.id === articleId;
+    });
+}
 
 module.exports = dataMutator;
