@@ -64,9 +64,9 @@ var Articles = React.createClass({
                 if(error) { alert(error); return; }
 
                 toast(response.text, 1000, '', function() {
-                    window.location.reload(); //TODO: for now
-                });
-            });
+                    this.props.handleMarkingArticleAsFavorite(articleId);
+                }.bind(this));
+            }.bind(this));
     },
 
     componentDidMount: function() {

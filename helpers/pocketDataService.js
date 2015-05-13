@@ -3,7 +3,7 @@
 var _ = require('lodash'),
     ARTICLE_STATUS = require('../helpers/articleStatusTypes.js');
 
-var dataMutator = {
+var pocketDataService = {
     updatePocketDataAfterArchiving: function(pocketData, articleId, articleTags) {
         _.forEach(articleTags, function(tag){
             _.forEach(pocketData, function(tagWithArticles) {
@@ -30,6 +30,42 @@ var dataMutator = {
                 }
             });
         });
+    },
+
+    updatePocketDataAfterDeleting: function(pocketData, articleId, articleTags) {
+        _.forEach(articleTags, function(tag){
+            _.forEach(pocketData, function(tagWithArticles) {
+                if (tagWithArticles.tag === tag) {
+                    _.remove(tagWithArticles.unread, function(article) {
+                        return article.id === articleId;
+                    });
+
+                    _.remove(tagWithArticles.archived, function(article) {
+                        return article.id === articleId;
+                    });
+                }
+            });
+        });
+    },
+
+    updatePocketDataAfterMarkingAsFavorite: function(pocketData, articleId) {
+        _.forEach(pocketData, function(tagWithArticles) {
+            var articlesToUpdate = [];
+
+            var unreadArticlesToUpdate = _.filter(tagWithArticles.unread, function(article) {
+                return article.id === articleId;
+            });
+
+            var archivedArticlesToUpdate = _.filter(tagWithArticles.archived, function(article) {
+                return article.id === articleId;
+            });
+
+            articlesToUpdate = articlesToUpdate.concat(unreadArticlesToUpdate, archivedArticlesToUpdate);
+
+            _.forEach(articlesToUpdate, function(article) {
+                article.favorite = !article.favorite;
+            });
+        });
     }
 };
 
@@ -45,4 +81,4 @@ function _removeArticleFrom(articlesCollection, articleId) {
     });
 }
 
-module.exports = dataMutator;
+module.exports = pocketDataService;

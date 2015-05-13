@@ -66,19 +66,7 @@ var HomePage = React.createClass({
     _handleArticleDelete: function(articleId, articleTags) {
         var pocketData = this.state.pocketData;
 
-        _.forEach(articleTags, function(tag){
-            _.forEach(pocketData, function(tagWithArticles) {
-                if (tagWithArticles.tag === tag) {
-                    _.remove(tagWithArticles.unread, function(article) {
-                        return article.id === articleId;
-                    });
-
-                    _.remove(tagWithArticles.archived, function(article) {
-                        return article.id === articleId;
-                    });
-                }
-            });
-        });
+        _pocketDataService.updatePocketDataAfterDeleting(pocketData, articleId, articleTags);
 
         this.setState({pocketData: pocketData});
     },
@@ -87,6 +75,14 @@ var HomePage = React.createClass({
         var pocketData = this.state.pocketData;
 
         _pocketDataService.updatePocketDataAfterArchiving(pocketData, articleId, articleTags);
+
+        this.setState({pocketData: pocketData});
+    },
+
+    _handleMarkingArticleAsFavorite: function(articleId) {
+        var pocketData = this.state.pocketData;
+
+        _pocketDataService.updatePocketDataAfterMarkingAsFavorite(pocketData, articleId);
 
         this.setState({pocketData: pocketData});
     },
@@ -100,14 +96,16 @@ var HomePage = React.createClass({
                                 filter={ 'unread' }
                                 showOnlyFavorited={ this.state.showOnlyFavorited }
                                 handleArticleDelete={ this._handleArticleDelete }
-                                handleArticleArchiving={ this._handleArticleArchiving } />;
+                                handleArticleArchiving={ this._handleArticleArchiving }
+                                handleMarkingArticleAsFavorite={ this._handleMarkingArticleAsFavorite } />;
 
         var archivedArticles = <Articles
                                     articles={ this.state.pocketData }
                                     filter={ 'archived' }
                                     showOnlyFavorited={ this.state.showOnlyFavorited }
                                     handleArticleDelete={ this._handleArticleDelete }
-                                    handleArticleArchiving={ this._handleArticleArchiving } />;
+                                    handleArticleArchiving={ this._handleArticleArchiving }
+                                    handleMarkingArticleAsFavorite={ this._handleMarkingArticleAsFavorite } />;
 
         var content = {};
         if(this.state.pocketData.length > 0) {
