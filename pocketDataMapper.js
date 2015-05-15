@@ -27,8 +27,8 @@ var PocketDataMapper = function() {
             };
 
             _.forEach(mappedArticles, function(article) {
-                if(_.contains(article.tags, tag)) {
-                    switch(article.status) {
+                if (_.contains(article.tags, tag)) {
+                    switch (article.status) {
                         case ARTICLE_STATUS.UNREAD:
                             tagWithArticles.unread.push(article);
                             break;
@@ -52,6 +52,9 @@ var PocketDataMapper = function() {
 
     function _mapArticles(articles) {
         return _(articles)
+        .sortBy(function(article) {
+            return article.time_added;
+        })
         .map(function(article) {
             var mapped = {
                 id: parseInt(article.item_id),

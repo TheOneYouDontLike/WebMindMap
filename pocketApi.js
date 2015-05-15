@@ -91,7 +91,7 @@ var pocketApi = function(pocketApiConsumerKey, options) {
                 if (error) { callback(error, null); return; }
                 console.log('got something');
 
-                if(options.saveToFile) {
+                if (options.saveToFile) {
                     fs.writeFile('temp.json', JSON.stringify(response.body), function() {
                         console.log('saved to file');
                     });

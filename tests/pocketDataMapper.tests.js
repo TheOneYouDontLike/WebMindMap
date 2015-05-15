@@ -12,9 +12,9 @@ function log(sth) {
 describe('pocketDataMapper', function() {
     var parsedFile = {};
 
-    before(function(done) {
-        fs.readFile('temp.test.json', function(error, data) {
-            if(error) { log(error); }
+    before(function(done){
+        fs.readFile('temp.test.json', function(error, data){
+            if (error) { log(error); }
             parsedFile = JSON.parse(data);
             done();
         });
