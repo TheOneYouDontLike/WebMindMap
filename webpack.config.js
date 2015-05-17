@@ -1,12 +1,16 @@
 var webpack = require('webpack');
 
 var commonsPlugin =
-  new webpack.optimize.CommonsChunkPlugin('common.js');
+  new webpack.optimize.CommonsChunkPlugin('common', 'common.js');
 
 module.exports = {
-    entry: './components/app.jsx',
+    entry: {
+        app: ['./components/app.jsx'],
+        common: ['react', 'superagent', 'lodash']
+    },
     output: {
-        filename: './public/app.bundle.js'
+        path: './public',
+        filename: 'app.bundle.js'
     },
     module: {
         loaders: [
