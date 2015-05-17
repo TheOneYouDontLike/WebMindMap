@@ -3,8 +3,8 @@
 var React = require('react'),
     superagent = require('superagent'),
     _ = require('lodash'),
-    Articles = require('./articles.jsx'),
-    _pocketDataService = require('../helpers/pocketDataService.js');
+    Articles = require('./articles'),
+    _pocketDataService = require('../helpers/pocketDataService');
 
 var mainContainer = document.getElementById('main-container');
 
