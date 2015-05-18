@@ -33,6 +33,7 @@ describe('pocketDataMapper', function() {
             url: 'http://www.ergotron.com/tabid/305/language/en-US/default.aspx',
             title: 'Ergonomic Workspace Planner, Workstation Installation Tool',
             favorite: false,
+            hasVideo: true,
             status: 'unread',
             excerpt: 'Remember! Even if your workspace is set up properly you can still get muscle fatigue from maintaining the same posture for too long—adjust the position of your monitor, keyboard and chair as your posture changes.  Notes: Be sure to include shoe height to figure proper measurement.',
             tags: ['development', 'dev']

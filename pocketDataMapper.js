@@ -61,6 +61,7 @@ var PocketDataMapper = function() {
                 url: article.resolved_url,
                 title: _extractTitle(article),
                 favorite: article.favorite === '1' ? true : false,
+                hasVideo: article.has_video === '1' ? true : false,
                 status: _extractStatus(article.status),
                 excerpt: article.excerpt,
                 tags: _extractTags(article.tags)

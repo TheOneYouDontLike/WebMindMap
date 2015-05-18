@@ -112,9 +112,14 @@ var Articles = React.createClass({
                         archiveButtonIcon = 'mdi-navigation-refresh';
                     }
 
+                    var videoIcon = null;
+                    if(article.hasVideo) {
+                        videoIcon = <span className="badge"><i className="mdi-av-videocam green-text"></i></span>;
+                    }
+
                     return (
                         <li className="collection-item" key={ article.id }>
-                            <a href={ article.url } style={ aTagStyle } target="_blank">{ article.title }</a>
+                            <a href={ article.url } style={ aTagStyle } target="_blank">{ article.title } { videoIcon }</a>
                             <hr />
                             <button className="btn-flat tooltipped" type="button" onClick={ this._archiveArticle.bind(null, article.id, article.tags, article.status) } data-delay="50" data-tooltip="Archive/Unarchive" data-position="top">
                                 <i className={ archiveButtonIcon }></i>
