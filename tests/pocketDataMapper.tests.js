@@ -36,7 +36,8 @@ describe('pocketDataMapper', function() {
             hasVideo: true,
             status: 'unread',
             excerpt: 'Remember! Even if your workspace is set up properly you can still get muscle fatigue from maintaining the same posture for too long—adjust the position of your monitor, keyboard and chair as your posture changes.  Notes: Be sure to include shoe height to figure proper measurement.',
-            tags: ['development', 'dev']
+            tags: ['development', 'dev'],
+            wordCount: 65
         };
 
         assert.that(articles[1].unread[0]).is.equalTo(expectedFirstItem);

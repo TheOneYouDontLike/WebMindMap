@@ -117,9 +117,11 @@ var Articles = React.createClass({
                         videoIcon = <span className="badge"><i className="mdi-av-videocam green-text"></i></span>;
                     }
 
+                    var wordCount = <span className="green-text">({ article.wordCount } words)</span>;
+
                     return (
                         <li className="collection-item" key={ article.id }>
-                            <a href={ article.url } style={ aTagStyle } target="_blank">{ article.title } { videoIcon }</a>
+                            <a href={ article.url } style={ aTagStyle } target="_blank">{ article.title } { videoIcon } { wordCount }</a>
                             <hr />
                             <button className="btn-flat tooltipped" type="button" onClick={ this._archiveArticle.bind(null, article.id, article.tags, article.status) } data-delay="50" data-tooltip="Archive/Unarchive" data-position="top">
                                 <i className={ archiveButtonIcon }></i>

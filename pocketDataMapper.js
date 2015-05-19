@@ -64,7 +64,8 @@ var PocketDataMapper = function() {
                 hasVideo: article.has_video === '1' ? true : false,
                 status: _extractStatus(article.status),
                 excerpt: article.excerpt,
-                tags: _extractTags(article.tags)
+                tags: _extractTags(article.tags),
+                wordCount: parseInt(article.word_count)
             };
 
             return mapped;
